@@ -1,26 +1,47 @@
-import pyautogui
-import webbrowser
+import re
 import time
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
+from webdriver_manager.chrome import ChromeDriverManager
 
-# Open donk
-url = "https://donkhouse.com/group/34524/90342"
-webbrowser.open(url)
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+driver.get('https://donkhouse.com/login')
 
-# Allow webpage to open fully (better to use Selenium webdriver)
-time.sleep(3)
 
-# Download coordinates on a 14-inch Macbook
-download_x = 530
-download_y = 270
+username_placeholder = 'Your Username'
+password_placeholder = 'Your Password'
+username_field = driver.find_element(By.XPATH, "//input[@placeholder='" + username_placeholder + "']")
+password_field = driver.find_element(By.XPATH, "//input[@placeholder='" + password_placeholder + "']")
 
-# Move the mouse to the download and click
-pyautogui.moveTo(download_x, download_y)
-pyautogui.click()
+username_field.send_keys('project-test')
+password_field.send_keys('project-test')
 
-# Transaction log coordinates on a 14-inch Macbook
-transaction_x = 900
-transaction_y = 650
+buttons = driver.find_elements(By.TAG_NAME, 'button')
+for button in buttons:
+    if button.text == 'Go!':
+        button.click()
+        break
 
-# Move the mouse to transaction log and click
-pyautogui.moveTo(transaction_x, transaction_y)
-pyautogui.click()
+time.sleep(2)
+driver.get('https://donkhouse.com/group/34524/92984')
+wait = WebDriverWait(driver, 10)
+canvas_locator = (By.TAG_NAME, 'canvas')
+wait.until(EC.presence_of_element_located(canvas_locator))
+
+canvas = driver.find_element(By.TAG_NAME, 'canvas')
+canvas_x = canvas.location['x']
+canvas_y = canvas.location['y']
+print(canvas_x)
+print(canvas_y)
+style = canvas.get_attribute('style')
+width = re.search(r"width:\s*([\d.]+)px", style).group(1)
+height = re.search(r"height:\s*([\d.]+)px", style).group(1)
+
+action_chains = ActionChains(driver)
+action_chains.move_to_element(canvas).perform()
+
+time.sleep(10)
