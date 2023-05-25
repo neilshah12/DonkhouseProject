@@ -1,6 +1,8 @@
 import re
 import time
+import os
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
@@ -8,7 +10,15 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
-driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+current_dir= os.getcwd()
+download_dir = os.path.join(current_dir, 'logs')
+prefs = {'download.default_directory': download_dir}
+
+
+chrome_options = Options()
+chrome_options.add_experimental_option('prefs', prefs)
+
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 driver.get('https://donkhouse.com/login')
 
 username_placeholder = 'Your Username'
@@ -43,7 +53,7 @@ height = re.search(r"height:\s*([\d.]+)px", style).group(1)
 print(float(width))
 print(float(height))
 
-time.sleep(10)
+time.sleep(5)
 # Calculate button position within the canvas
 button_x = 178/847
 button_y = 40/529.375
