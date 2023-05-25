@@ -9,9 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
-driver.maximize_window()
 driver.get('https://donkhouse.com/login')
-
 
 username_placeholder = 'Your Username'
 password_placeholder = 'Your Password'
@@ -32,26 +30,28 @@ driver.get('https://donkhouse.com/group/34524/93022')
 wait = WebDriverWait(driver, 10)
 canvas_locator = (By.TAG_NAME, 'canvas')
 wait.until(EC.presence_of_element_located(canvas_locator))
-time.sleep(10)
-
 
 canvas = driver.find_element(By.TAG_NAME, 'canvas')
-canvas_width = canvas.rect['width']
-canvas_height = canvas.rect['height']
+canvas_x = canvas.location['x']
+canvas_y = canvas.location['y']
+print(canvas_x)
+print(canvas_y)
+style = canvas.get_attribute('style')
+width = re.search(r"width:\s*([\d.]+)px", style).group(1)
+height = re.search(r"height:\s*([\d.]+)px", style).group(1)
 
-DOWNLOAD_X_RATIO = 42/800
-DOWNLOAD_Y_RATIO = 34/500
+print(float(width))
+print(float(height))
 
-
-download_x_offset = round(DOWNLOAD_X_RATIO * canvas_width - canvas_width / 2) 
-download_y_offset = round(DOWNLOAD_Y_RATIO * canvas_height - canvas_height / 2)
-
-print(download_x_offset)
-print(download_y_offset)
+time.sleep(10)
+# Calculate button position within the canvas
+button_x = 178/847
+button_y = 40/529.375
 
 action_chains = ActionChains(driver)
-action_chains.move_to_element_with_offset(canvas, download_x_offset, download_y_offset).click().perform()
+action_chains.move_to_element_with_offset(canvas, button_x * float(width) - (float(width)//2), button_y * float(height) - (float(height)//2)).click().perform()
 
+time.sleep(3)
+action_chains.move_to_element_with_offset(canvas, 0, 0).click().perform()
 
-
-time.sleep(1000)
+time.sleep(10)
