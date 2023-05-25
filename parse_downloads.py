@@ -1,42 +1,58 @@
 import pandas as pd
-import datetime as dt
-from datetime import time
+from datetime import datetime as dt
+import math
 import pickle
 from player import Player
 
 try:
-    with open('last_time.pickle', 'wb') as file:
+    with open('last_time.pickle', 'rb') as file:
         latest_time = pickle.load(file)
-except EOFError:
-    latest_time = time()
+except (EOFError, FileNotFoundError):
+    latest_time = dt.min
 
-players = set()
 
-def parse_nets(in_and_outs):
+all_players = dict()
+
+
+def update_latest_time():
+    with open('last_time.pickle', 'wb') as f:
+        pickle.dump(latest_time, f)
+
+
+def update_players(game_players):
+    for player in game_players:
+        if player in all_players:
+            dict_player = dict.get(player.username)
+            dict_player.net += player.net
+            dict_player.hands += player.hands
+        else:
+            all_players[player.username] = player
+
+
+def parse_nets(in_and_outs: str):
     df = pd.read_csv(in_and_outs, skiprows=1, skip_blank_lines=False)
-    finished_game = False
-    new_latest_time = time()
+    new_latest_time = latest_time
+    game_players = list()
     for _, row in df.iterrows():
         user = row['User']
-        if user == 'nan' and not finished_game:
-            players.clear()
-        elif user == 'End time':
+        net = row['Net']
+        if not isinstance(user, str):
+            game_players.clear()
+        elif user == 'End time:' and math.isnan(net):
             curr_end_time = dt.strptime(row['In'], '%Y-%m-%d %H:%M:%S')
+            new_latest_time = max(new_latest_time, curr_end_time)
             if curr_end_time <= latest_time:
                 return
-            finished_game = True
-            new_latest_time = max(new_latest_time, curr_end_time)
-            
-        players.add(Player(username=user))
-
-    # for col in df.columns:
-    #     print(col)
-    # print(df['In']) 
-    # print(df['User'].iloc[20])
+            update_players(game_players)
+        elif not math.isnan(net):
+            game_players.append(Player(username=user, net=net))
+    update_latest_time()
 
 
 def parse_stats(hand_histories):
     pass
 
 
-parse_nets(r"C:\Users\bdu82\Downloads\chip_history_2023-5-24_20-51EST.csv")
+parse_nets(r"/Users/brandondu/Downloads/Test.csv")
+for key, value in all_players.items():
+    print(f"{key}: {value}")
