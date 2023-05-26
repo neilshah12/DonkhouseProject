@@ -32,8 +32,10 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Set up Docker
-      uses: docker/setup-docker@v1
+      uses: docker/build-push-action@v2
     - name: Run your script with Chromedriver
       run: |
           docker run -d -p 4444:4444 --name=chrome selenium/standalone-chrome
           python download_transcation_log.py
+    - name: Stop Docker container
+      run: docker stop chrome && docker rm chrome
