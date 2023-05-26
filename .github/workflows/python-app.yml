@@ -32,4 +32,8 @@ jobs:
       with:
         name: transaction-logs
         path: logs/
-    
+    - name: Download artifact
+      uses: actions/download-artifact@v2
+      with:
+        name: Downloaded Logs
+        path: logs/
