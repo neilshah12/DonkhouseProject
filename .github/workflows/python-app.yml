@@ -35,5 +35,5 @@ jobs:
     - name: Download artifact
       uses: actions/download-artifact@v2
       with:
-        name: Downloaded Logs
+        name: transaction-logs
         path: logs/
