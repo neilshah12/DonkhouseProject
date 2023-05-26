@@ -20,10 +20,14 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+    - uses: actions/cache@v3
+      id: cache
+      with:
+        path: ${{ env.pythonLocation }}
+        key: ${{ runner.os }}-python-${{ env.pythonLocation }}-${{ hashFiles('requirements.txt') }}-test1
+    - name: Install Dependencies
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: pip install -r requirements.txt
     - uses: browser-actions/setup-chrome@latest
     - name: Run script
       run: python download_transcation_log.py
@@ -36,4 +40,3 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: transaction-logs
-        path: logs/
