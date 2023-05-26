@@ -31,13 +31,9 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Install Chromedriver
+    - name: Set up Docker
+      uses: docker/setup-docker@v1
+    - name: Run your script with Chromedriver
       run: |
-          CHROME_VERSION=$(google-chrome-stable --version | grep -oP "(?<=Google Chrome )([0-9]+)")
-          CHROME_DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION")
-          curl -O "https://chromedriver.storage.googleapis.com/$CHROME_DRIVER_VERSION/chromedriver_linux64.zip"
-          unzip chromedriver_linux64.zip
-          chmod +x chromedriver
-          sudo mv chromedriver /usr/local/bin/
-    - name: execute py script # run main.py
-      run: python download_transcation_log.py
+          docker run -d -p 4444:4444 --name=chrome selenium/standalone-chrome
+          python download_transcation_log.py
