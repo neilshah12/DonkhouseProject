@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
-current_dir= os.getcwd()
+current_dir = os.getcwd()
 download_dir = os.path.join(current_dir, 'logs')
 prefs = {'download.default_directory': download_dir}
 
