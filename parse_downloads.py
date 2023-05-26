@@ -1,8 +1,12 @@
-import pandas as pd, math, pickle, re
-from typing import Dict
 from datetime import datetime as dt
-from player import Player
+from typing import Dict
 
+import math
+import pandas as pd
+import pickle
+import re
+
+from player import Player
 
 try:
     with open('last_time.pickle', 'rb') as file:
@@ -80,21 +84,31 @@ def parse_stats(hand_histories: str):
                         if re.match(pattern=bb_player_pattern, string=line):
                             bb_player = player_name
                     line = f.readline()
-                line = f.readline()
-                is_walk = True
 
+                is_walk = True
+                line = f.readline()
                 while not re.match(pattern=flop_pattern, string=line):
                     if re.match(pattern=won_pattern, string=line):
                         game_over = True
                         if is_walk:
                             del game_players[bb_player]
                         break
-                    player = re.match(pattern=vpip_pattern, string=line)
+                    player = re.match(pattern=vpip_pattern, string=line).group(1)
                     if player is not None:
                         game_players.get(player).hands_played = 1
                         is_walk = False
-                if game_over:
-                    update_players(player_dict, game_players)
+
+                if not game_over:
+                    line = f.readline()
+                    while not re.match(pattern=won_pattern, string=line):
+                        line = f.readline()
+
+                    winner = re.match(pattern=won_pattern, string=line).group(1)
+                    while winner is not None:
+                        game_players.get(winner)
+
+                update_players(player_dict, game_players)
+
 
 #
 # parse_nets(r"/Users/brandondu/Downloads/Test.csv")
