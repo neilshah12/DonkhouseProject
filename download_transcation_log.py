@@ -52,6 +52,4 @@ print(download_y_offset)
 action_chains = ActionChains(driver)
 action_chains.move_to_element_with_offset(canvas, download_x_offset, download_y_offset).click().perform()
 
-
-
 time.sleep(1000)

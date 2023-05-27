@@ -86,7 +86,6 @@ def parse_stats(hand_histories: str):
 
             while re.match(pattern=bb_post_pattern, string=line) is None:
                 if re.match(pattern=in_hand_pattern, string=line):
-
                     player_name = re.match(pattern=r'^([a-zA-Z0-9_.-]+)', string=line).group(1)
                     game_players[player_name] = Player(username=player_name, hands_seen=1)
                     if re.match(pattern=bb_player_pattern, string=line):
