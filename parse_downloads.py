@@ -114,6 +114,6 @@ def parse_stats(hand_histories: str):
 
 prev_latest_time = dt.min
 curr_latest_time = dt.strptime('2023-05-25 20:12:37', '%Y-%m-%d %H:%M:%S')
-parse_stats(r'/Users/brandondu/Downloads/Test.txt')
+parse_stats(r'Test.txt')
 for p in all_players:
     print(all_players[p])
