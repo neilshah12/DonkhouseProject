@@ -7,7 +7,6 @@ import pandas as pd
 import pickle
 import re
 
-
 try:
     with open('last_time.pickle', 'rb') as file:
         prev_latest_time = pickle.load(file)
@@ -59,16 +58,23 @@ def parse_nets(in_and_outs: str):
 def parse_stats(hand_histories: str):
     new_game_pattern = r'(\ufeff)?\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}: New hand \(ID [a-zA-Z0-9]+\) of NL Texas Holdem'
     time_pattern = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})'
-    bb_player_pattern = r'^([a-zA-Z0-9_.-]+) \(\d+(\.\d{1,2})?, BB\)'
-    in_hand_pattern = r'^[a-zA-Z0-9_.-]+ \(\d+(\.\d{1,2})?, [A-Z0-9+]+\)'
-    bb_post_pattern = r'^[a-zA-Z0-9_.-]+ posted (\d+(\.\d{1,2})?)'
-    flop_pattern = r'^board: ([2-9]|10|J|Q|K|A)\? ([2-9]|10|J|Q|K|A)\? ([2-9]|10|J|Q|K|A)\? '
-    won_pattern = r'^([a-zA-Z0-9_.-]+) won \d+(\.\d{1,2})? chips'
+    bb_player_pattern = r'([a-zA-Z0-9_.-]+) \(\d+(\.\d{1,2})?, BB\)'
+    in_hand_pattern = r'[a-zA-Z0-9_.-]+ \(\d+(\.\d{1,2})?, [A-Z0-9+]+\)'
+    bb_post_pattern = r'[a-zA-Z0-9_.-]+ posted (\d+(\.\d{1,2})?)'
+    flop_pattern = r'board: ([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
+                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
+                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)'
+    turn_pattern = r'board: ([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
+                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
+                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
+                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)'
     vpip_pattern = r'^([a-zA-Z0-9_.-]+) (called \d+(\.\d{1,2})?|raised to \d+(\.\d{1,2})?)'
     raise_pattern = r'^[a-zA-Z0-9_.-]+ raised to \d+(\.\d{1,2})?'
+    won_pattern = r'^([a-zA-Z0-9_.-]+) won \d+(\.\d{1,2})? chips'
 
     with open(hand_histories, 'r') as f:
         player_dict: Dict[str, Player] = {}
+
         for line in f:
             if re.match(pattern=new_game_pattern, string=line) is None:
                 continue
@@ -81,7 +87,7 @@ def parse_stats(hand_histories: str):
                 return
 
             game_players: Dict[str, Player] = {}
-            bb_player = str
+            bb_player, rfi_player, tb_player, fb_player = str
             line = f.readline()
 
             while re.match(pattern=bb_post_pattern, string=line) is None:
@@ -111,8 +117,17 @@ def parse_stats(hand_histories: str):
         update_players(all_players, player_dict)
 
 
-prev_latest_time = dt.min
-curr_latest_time = dt.strptime('2023-05-25 20:12:37', '%Y-%m-%d %H:%M:%S')
-parse_stats(r'Test.txt')
-for p in all_players:
-    print(all_players[p])
+# prev_latest_time = dt.min
+# curr_latest_time = dt.strptime('2023-05-25 20:12:37', '%Y-%m-%d %H:%M:%S')
+parse_stats(r'/Users/brandondu/Downloads/Test1.rtf')
+# for p in all_players:
+#     print(all_players[p])
+
+#
+# text = 'board: Q\\uc0\\u9827  Q\\u9830  6\\u9824 \\\n'
+# pattern = r'board: ([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
+#           r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
+#           r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)'
+# #
+# matches = re.findall(pattern, text)
+# print(matches)
