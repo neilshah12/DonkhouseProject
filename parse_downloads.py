@@ -93,7 +93,7 @@ def parse_stats(hand_histories: str):
                 return
 
             game_players: Dict[str, Player] = {}
-            bb_player = ""
+            bb_player = None
             line = f.readline()
 
             while line and not re.match(bb_post_pattern, line):
@@ -101,11 +101,11 @@ def parse_stats(hand_histories: str):
                     player_name = re.match(player_pattern, line).group(1)
                     game_players[player_name] = Player(player_name)
                     if re.match(bb_player_pattern, line):
-                        bb_player = player_name
+                        bb_player = game_players[player_name]
                 line = f.readline()
 
             is_walk = True
-            rfi_player, tb_player, fb_player, last_raise_player = "", "", "", ""
+            rfi_player, tb_player, fb_player, last_raise_player = None, None, None, None
 
             # preflop
             while line and not re.match(flop_pattern, line):
@@ -114,43 +114,46 @@ def parse_stats(hand_histories: str):
                         del game_players[bb_player]
                     break
                 elif re.match(raise_pattern, line):
-                    player = re.match(player_pattern, line).group(1)
-                    game_players[player].pfr = (1, 1)
-                    game_players[player].vpip = (1, 1)
+                    player = game_players[re.match(player_pattern, line).group(1)]
 
-                    if rfi_player == "":
+                    player.pfr = (1, 1)
+                    player.vpip = (1, 1)
+
+                    if rfi_player is None:
                         rfi_player = player
-                        game_players[rfi_player].uopfr = (1, 1)
-                    elif tb_player == "" and not game_players[player].called_bb:
+                        rfi_player.uopfr = (1, 1)
+                    elif tb_player is None and not player.called_bb:
                         tb_player = player
-                        game_players[tb_player].tb = (1, 1)
-                    elif fb_player == "" and game_players[player].raised:
+                        tb_player.tb = (1, 1)
+                    elif fb_player is None and player.raised:
                         fb_player = player
-                        game_players[fb_player].fb = (1, 1)
+                        fb_player.fb = (1, 1)
 
                     last_raise_player = player
-                    game_players[player].raised = True
+                    player.raised = True
                     is_walk = False
                 elif re.match(call_pattern, line):
-                    player = re.match(player_pattern, line).group(1)
-                    game_players[player].vpip = (1, 1)
-                    game_players[player].pfr = (0, 1)
+                    player = game_players[re.match(player_pattern, line).group(1)]
+                    player.vpip = (1, 1)
+                    player.pfr = (0, 1)
                     is_walk = False
 
-                    if rfi_player == "":
-                        game_players[player].uopfr = (0, 1)
-                        game_players[player].called_bb = True
-                    elif tb_player == "":
-                        game_players[player].tb = (0, 1)
-                    elif fb_player == "":
-                        game_players[player].fb = (0, 1)
-
+                    if rfi_player is None:
+                        player.uopfr = (0, 1)
+                        player.called_bb = True
+                    elif tb_player is None:
+                        player.tb = (0, 1)
+                    elif fb_player is None:
+                        player.fb = (0, 1)
+                    is_walk = False
                 elif re.match(fold_pattern, line):
-                    player = re.match(player_pattern, line).group(1)
-                    if player == rfi_player and fb_player == "":
+                    player = game_players[re.match(player_pattern, line).group(1)]
+                    if player == rfi_player and fb_player is None:
                         game_players[player].f3b = (1, 1)
-
                 line = f.readline()
+
+
+
             # print(repr(line))
             first_bet_on_flop_player = ""
             while line and not re.match(turn_pattern, line):

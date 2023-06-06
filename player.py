@@ -16,10 +16,9 @@ class Player:
         self.donk = (0, 0)
         self.raised = False
         self.called_bb = False
-    # def __eq__(self, other):
-    #     if isinstance(other, Player):
-    #         return self.username == other.username
-    #     return False
+
+    def __eq__(self, other):
+        return self.username == other.username
 
     def __hash__(self):
         return hash(self.username)
@@ -28,6 +27,7 @@ class Player:
         return f"Player: {self.username}, " \
                f"Net: {self.net}, " \
                f"VPIP: {self.vpip}, " \
+               f"UOPFR: {self.uopfr}, " \
                f"PFR: {self.pfr}, " \
                f"3-Bet: {self.tb}, " \
                f"4-Bet: {self.fb}, " \
@@ -41,6 +41,7 @@ class Player:
             return
         self.net += other.net
         self.vpip = tuple(map(lambda i, j: i + j, self.vpip, other.vpip))
+        self.uopfr = tuple(map(lambda i, j: i + j, self.pfr, other.pfr))
         self.pfr = tuple(map(lambda i, j: i + j, self.pfr, other.pfr))
         self.tb = tuple(map(lambda i, j: i + j, self.tb, other.tb))
         self.fb = tuple(map(lambda i, j: i + j, self.fb, other.fb))
