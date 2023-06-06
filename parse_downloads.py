@@ -73,7 +73,6 @@ def parse_stats(hand_histories: str):
                    r'([2-9]|10|J|Q|K|A)(\\uc0)?(♠|♦|♥|♣)'
     bet_pattern = r'[a-zA-Z0-9_.-]+ bet \d+(\.\d{1,2})?'
     call_pattern = r'[a-zA-Z0-9_.-]+ called \d+(\.\d{1,2})?'
-    vpip_pattern = r'[a-zA-Z0-9_.-]+ (called \d+(\.\d{1,2})?|raised to \d+(\.\d{1,2})?)'
     raise_pattern = r'[a-zA-Z0-9_.-]+ raised to \d+(\.\d{1,2})?'
     fold_pattern = r'[a-zA-Z0-9_.-]+ folded'
     player_pattern = r'([a-zA-Z0-9_.-]+)'
