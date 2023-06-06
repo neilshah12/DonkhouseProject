@@ -18,7 +18,9 @@ class Player:
         self.called_bb = False
 
     def __eq__(self, other):
-        return self.username == other.username
+        if isinstance(other, Player):
+            return self.username == other.username
+        return False
 
     def __hash__(self):
         return hash(self.username)
@@ -31,9 +33,8 @@ class Player:
                f"PFR: {self.pfr}, " \
                f"3-Bet: {self.tb}, " \
                f"4-Bet: {self.fb}, " \
-               f"C-Bet: {self.cbet}, " \
                f"F3B: {self.f3b}, " \
-               f"Fold to Any 3Bet: {self.f3ba}, " \
+               f"C-Bet: {self.cbet}, " \
                f"Donk Bet: {self.donk}"
 
     def update(self, other):
@@ -47,5 +48,4 @@ class Player:
         self.fb = tuple(map(lambda i, j: i + j, self.fb, other.fb))
         self.cbet = tuple(map(lambda i, j: i + j, self.cbet, other.cbet))
         self.f3b = tuple(map(lambda i, j: i + j, self.f3b, other.f3b))
-        self.f3ba = tuple(map(lambda i, j: i + j, self.f3ba, other.f3ba))
         self.donk = tuple(map(lambda i, j: i + j, self.donk, other.donk))

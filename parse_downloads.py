@@ -111,7 +111,7 @@ def parse_stats(hand_histories: str):
             while line and not re.match(flop_pattern, line):
                 if re.match(won_pattern, line):
                     if is_walk:
-                        del game_players[bb_player]
+                        del bb_player
                     break
                 elif re.match(raise_pattern, line):
                     player = game_players[re.match(player_pattern, line).group(1)]
@@ -122,10 +122,11 @@ def parse_stats(hand_histories: str):
                     if rfi_player is None:
                         rfi_player = player
                         rfi_player.uopfr = (1, 1)
-                    elif tb_player is None and not player.called_bb:
+                    elif tb_player is None:
                         tb_player = player
-                        tb_player.tb = (1, 1)
-                    elif fb_player is None and player.raised:
+                        if not player.called_bb:
+                            tb_player.tb = (1, 1)
+                    elif player.raised:
                         fb_player = player
                         fb_player.fb = (1, 1)
 
@@ -135,7 +136,7 @@ def parse_stats(hand_histories: str):
                 elif re.match(call_pattern, line):
                     player = game_players[re.match(player_pattern, line).group(1)]
                     player.vpip = (1, 1)
-                    player.pfr = (0, 1)
+                    player.pfr = (0, 1) if player.pfr == (0, 0) else (1, 1)
                     is_walk = False
 
                     if rfi_player is None:
@@ -144,17 +145,18 @@ def parse_stats(hand_histories: str):
                     elif tb_player is None:
                         player.tb = (0, 1)
                     elif fb_player is None:
+                        if rfi_player == player:
+                            player.f3b = (0, 1)
                         player.fb = (0, 1)
-                    is_walk = False
+
                 elif re.match(fold_pattern, line):
                     player = game_players[re.match(player_pattern, line).group(1)]
                     if player == rfi_player and fb_player is None:
-                        game_players[player].f3b = (1, 1)
+                        player.f3b = (1, 1)
+                    player.vpip = (0, 1) if player.vpip == (0, 0) else (1, 1)
+                    player.pfr = (0, 1) if player.pfr == (0, 0) else (1, 1)
                 line = f.readline()
 
-
-
-            # print(repr(line))
             first_bet_on_flop_player = ""
             while line and not re.match(turn_pattern, line):
                 # print(repr(line))
@@ -165,7 +167,6 @@ def parse_stats(hand_histories: str):
                     if first_bet_on_flop_player == "":
                         if player != last_raise_player:
                             game_players[player].donk = (1, 1)
-                            game_players[last_raise_player].cbet = (0, 0)
                         else:
                             game_players[player].cbet = (1, 1)
 
