@@ -26,11 +26,7 @@ def update_players(players_dict, game_players):
     for key in game_players:
         player = game_players[key]
         if player.username in players_dict:
-            dict_player = players_dict.get(player.username)
-            dict_player.net += player.net
-            dict_player.hands_seen += player.hands_seen
-            dict_player.hands_played += player.hands_played
-            dict_player.hands_raised_pre += player.hands_raised_pre
+            players_dict[key].update(player)
         else:
             players_dict[key] = player
 
@@ -56,29 +52,40 @@ def parse_nets(in_and_outs: str):
 
 
 def parse_stats(hand_histories: str):
-    new_game_pattern = r'(\ufeff)?\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}: New hand \(ID [a-zA-Z0-9]+\) of NL Texas Holdem'
-    time_pattern = r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})'
+    new_game_pattern = r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}: New hand \(ID [a-zA-Z0-9]+\) of NL Texas Holdem'
+    time_pattern = r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'
     bb_player_pattern = r'([a-zA-Z0-9_.-]+) \(\d+(\.\d{1,2})?, BB\)'
     in_hand_pattern = r'[a-zA-Z0-9_.-]+ \(\d+(\.\d{1,2})?, [A-Z0-9+]+\)'
     bb_post_pattern = r'[a-zA-Z0-9_.-]+ posted (\d+(\.\d{1,2})?)'
-    flop_pattern = r'board: ([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
-                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
-                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)'
-    turn_pattern = r'board: ([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
-                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
-                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
-                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)'
-    vpip_pattern = r'^([a-zA-Z0-9_.-]+) (called \d+(\.\d{1,2})?|raised to \d+(\.\d{1,2})?)'
-    raise_pattern = r'^[a-zA-Z0-9_.-]+ raised to \d+(\.\d{1,2})?'
-    won_pattern = r'^([a-zA-Z0-9_.-]+) won \d+(\.\d{1,2})? chips'
+    # flop_pattern = r'board: ([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
+    #                r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
+    #                r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)'
+    # turn_pattern = r'board: ([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
+    #                r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
+    #                r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
+    #                r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)'
+    flop_pattern = r'board: ([2-9]|10|J|Q|K|A)(\\uc0)?(♠|♦|♥|♣)\s+' \
+                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(♠|♦|♥|♣)\s+' \
+                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(♠|♦|♥|♣)'
+    turn_pattern = r'board: ([2-9]|10|J|Q|K|A)(\\uc0)?(♠|♦|♥|♣)\s+' \
+                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(♠|♦|♥|♣)\s+' \
+                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(♠|♦|♥|♣)\s+' \
+                   r'([2-9]|10|J|Q|K|A)(\\uc0)?(♠|♦|♥|♣)'
+    bet_pattern = r'[a-zA-Z0-9_.-]+ bet \d+(\.\d{1,2})?'
+    call_pattern = r'[a-zA-Z0-9_.-]+ called \d+(\.\d{1,2})?'
+    vpip_pattern = r'[a-zA-Z0-9_.-]+ (called \d+(\.\d{1,2})?|raised to \d+(\.\d{1,2})?)'
+    raise_pattern = r'[a-zA-Z0-9_.-]+ raised to \d+(\.\d{1,2})?'
+    fold_pattern = r'[a-zA-Z0-9_.-]+ folded'
+    player_pattern = r'([a-zA-Z0-9_.-]+)'
+    won_pattern = r'([a-zA-Z0-9_.-]+) won \d+(\.\d{1,2})? chips'
 
     with open(hand_histories, 'r') as f:
         player_dict: Dict[str, Player] = {}
 
         for line in f:
-            if re.match(pattern=new_game_pattern, string=line) is None:
+            if not re.search(new_game_pattern, line):
                 continue
-            time = dt.strptime(re.search(pattern=time_pattern, string=line).group(1), '%Y-%m-%d %H:%M:%S')
+            time = dt.strptime(re.search(time_pattern, line).group(), '%Y-%m-%d %H:%M:%S')
 
             if time <= prev_latest_time:
                 continue
@@ -87,41 +94,90 @@ def parse_stats(hand_histories: str):
                 return
 
             game_players: Dict[str, Player] = {}
-            bb_player, rfi_player, tb_player, fb_player = str
+            bb_player = ""
             line = f.readline()
 
-            while re.match(pattern=bb_post_pattern, string=line) is None:
-                if re.match(pattern=in_hand_pattern, string=line):
-                    player_name = re.match(pattern=r'^([a-zA-Z0-9_.-]+)', string=line).group(1)
-                    game_players[player_name] = Player(username=player_name, hands_seen=1)
-                    if re.match(pattern=bb_player_pattern, string=line):
+            while line and not re.match(bb_post_pattern, line):
+                if re.match(in_hand_pattern, line):
+                    player_name = re.match(player_pattern, line).group(1)
+                    game_players[player_name] = Player(player_name)
+                    if re.match(bb_player_pattern, line):
                         bb_player = player_name
                 line = f.readline()
 
             is_walk = True
-            line = f.readline()
-            while re.match(pattern=flop_pattern, string=line) is None:
-                if re.match(pattern=won_pattern, string=line):
+            rfi_player, tb_player, fb_player, last_raise_player = "", "", "", ""
+
+            # preflop
+            while line and not re.match(flop_pattern, line):
+                if re.match(won_pattern, line):
                     if is_walk:
                         del game_players[bb_player]
                     break
-                if re.match(pattern=vpip_pattern, string=line) is not None:
-                    player = re.match(pattern=vpip_pattern, string=line).group(1)
+                elif re.match(raise_pattern, line):
+                    player = re.match(player_pattern, line).group(1)
+                    game_players[player].pfr = (1, 1)
+                    game_players[player].vpip = (1, 1)
+
+                    if rfi_player == "":
+                        rfi_player = player
+                        game_players[rfi_player].uopfr = (1, 1)
+                    elif tb_player == "" and not game_players[player].called_bb:
+                        tb_player = player
+                        game_players[tb_player].tb = (1, 1)
+                    elif fb_player == "" and game_players[player].raised:
+                        fb_player = player
+                        game_players[fb_player].fb = (1, 1)
+
+                    last_raise_player = player
+                    game_players[player].raised = True
                     is_walk = False
-                    game_players[player].hands_played = 1
-                    if re.match(pattern=raise_pattern, string=line) is not None:
-                        game_players[player].hands_raised_pre = 1
+                elif re.match(call_pattern, line):
+                    player = re.match(player_pattern, line).group(1)
+                    game_players[player].vpip = (1, 1)
+                    game_players[player].pfr = (0, 1)
+                    is_walk = False
+
+                    if rfi_player == "":
+                        game_players[player].uopfr = (0, 1)
+                        game_players[player].called_bb = True
+                    elif tb_player == "":
+                        game_players[player].tb = (0, 1)
+                    elif fb_player == "":
+                        game_players[player].fb = (0, 1)
+
+                elif re.match(fold_pattern, line):
+                    player = re.match(player_pattern, line).group(1)
+                    if player == rfi_player and fb_player == "":
+                        game_players[player].f3b = (1, 1)
+
+                line = f.readline()
+            # print(repr(line))
+            first_bet_on_flop_player = ""
+            while line and not re.match(turn_pattern, line):
+                # print(repr(line))
+                if re.match(won_pattern, line):
+                    break
+                if re.match(bet_pattern, line):
+                    player = re.match(player_pattern, line).group(1)
+                    if first_bet_on_flop_player == "":
+                        if player != last_raise_player:
+                            game_players[player].donk = (1, 1)
+                            game_players[last_raise_player].cbet = (0, 0)
+                        else:
+                            game_players[player].cbet = (1, 1)
+
                 line = f.readline()
             update_players(player_dict, game_players)
             game_players.clear()
         update_players(all_players, player_dict)
 
 
-# prev_latest_time = dt.min
-# curr_latest_time = dt.strptime('2023-05-25 20:12:37', '%Y-%m-%d %H:%M:%S')
-parse_stats(r'/Users/brandondu/Downloads/Test1.rtf')
-# for p in all_players:
-#     print(all_players[p])
+prev_latest_time = dt.min
+curr_latest_time = dt.strptime('2023-06-10 20:12:37', '%Y-%m-%d %H:%M:%S')
+parse_stats(r'/Users/brandondu/Downloads/Test5.txt')
+for p in all_players:
+    print(all_players[p])
 
 #
 # text = 'board: Q\\uc0\\u9827  Q\\u9830  6\\u9824 \\\n'

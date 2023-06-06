@@ -1,27 +1,50 @@
+from fractions import Fraction
+
+
 class Player:
-    def __init__(self, username: str, net: float = 0, hands_seen: int = 0, hands_played: int = 0,
-                 hands_raised_pre: int = 0, hands_tb: int = 0, hands_fb: int = 0, hands_cb: int = 0,
-                 hands_fold_to_cb_after_raise: int = 0, hands_fold_to_cb: int = 0):
+    def __init__(self, username, net=0):
         self.username = username
         self.net = net
-        self.hands_seen = hands_seen
-        self.hands_played = hands_played
-        self.hands_raised_pre = hands_raised_pre
-        self.hands_tb = hands_tb
-        self.hands_fb = hands_fb
-        self.hands_cb = hands_cb
-        self.hands_fold_to_cb_after_raise = hands_fold_to_cb_after_raise
-        self.hands_fold_to_cb = hands_fold_to_cb
-
-    def __eq__(self, other):
-        if isinstance(other, Player):
-            return self.username == other.username
-        return False
+        self.vpip = (0, 0)
+        self.uopfr = (0, 0)
+        self.pfr = (0, 0)
+        self.tb = (0, 0)
+        self.fb = (0, 0)
+        self.f3b = (0, 0)
+        self.f4b = (0, 0)
+        self.cbet = (0, 0)
+        self.donk = (0, 0)
+        self.raised = False
+        self.called_bb = False
+    # def __eq__(self, other):
+    #     if isinstance(other, Player):
+    #         return self.username == other.username
+    #     return False
 
     def __hash__(self):
         return hash(self.username)
 
     def __str__(self):
-        return f"Player(username={self.username}, net={self.net}, hands_seen={self.hands_seen}, " \
-               f"hands_played={self.hands_played}, hands_raised_pre={self.hands_raised_pre})"
+        return f"Player: {self.username}, " \
+               f"Net: {self.net}, " \
+               f"VPIP: {self.vpip}, " \
+               f"PFR: {self.pfr}, " \
+               f"3-Bet: {self.tb}, " \
+               f"4-Bet: {self.fb}, " \
+               f"C-Bet: {self.cbet}, " \
+               f"F3B: {self.f3b}, " \
+               f"Fold to Any 3Bet: {self.f3ba}, " \
+               f"Donk Bet: {self.donk}"
 
+    def update(self, other):
+        if not isinstance(other, Player) or self.username != other.username:
+            return
+        self.net += other.net
+        self.vpip = tuple(map(lambda i, j: i + j, self.vpip, other.vpip))
+        self.pfr = tuple(map(lambda i, j: i + j, self.pfr, other.pfr))
+        self.tb = tuple(map(lambda i, j: i + j, self.tb, other.tb))
+        self.fb = tuple(map(lambda i, j: i + j, self.fb, other.fb))
+        self.cbet = tuple(map(lambda i, j: i + j, self.cbet, other.cbet))
+        self.f3b = tuple(map(lambda i, j: i + j, self.f3b, other.f3b))
+        self.f3ba = tuple(map(lambda i, j: i + j, self.f3ba, other.f3ba))
+        self.donk = tuple(map(lambda i, j: i + j, self.donk, other.donk))
