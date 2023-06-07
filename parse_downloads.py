@@ -6,6 +6,7 @@ import math
 import pandas as pd
 import pickle
 import re
+import sys
 
 try:
     with open('last_time.pickle', 'rb') as file:
@@ -57,13 +58,6 @@ def parse_stats(hand_histories: str):
     bb_player_pattern = r'([a-zA-Z0-9_.-]+) \(\d+(\.\d{1,2})?, BB\)'
     in_hand_pattern = r'[a-zA-Z0-9_.-]+ \(\d+(\.\d{1,2})?, [A-Z0-9+]+\)'
     bb_post_pattern = r'[a-zA-Z0-9_.-]+ posted (\d+(\.\d{1,2})?)'
-    # flop_pattern = r'board: ([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
-    #                r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
-    #                r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)'
-    # turn_pattern = r'board: ([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
-    #                r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
-    #                r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)\s+' \
-    #                r'([2-9]|10|J|Q|K|A)(\\uc0)?(\\u9830|\\u9827|\\u9829|\\u9824)'
     flop_pattern = r'board: ([2-9]|10|J|Q|K|A)(\\uc0)?(♠|♦|♥|♣)\s+' \
                    r'([2-9]|10|J|Q|K|A)(\\uc0)?(♠|♦|♥|♣)\s+' \
                    r'([2-9]|10|J|Q|K|A)(\\uc0)?(♠|♦|♥|♣)'
@@ -74,6 +68,7 @@ def parse_stats(hand_histories: str):
     bet_pattern = r'[a-zA-Z0-9_.-]+ bet \d+(\.\d{1,2})?'
     call_pattern = r'[a-zA-Z0-9_.-]+ called \d+(\.\d{1,2})?'
     raise_pattern = r'[a-zA-Z0-9_.-]+ raised to \d+(\.\d{1,2})?'
+    check_pattern = r'[a-zA-Z0-9_.-]+ checked'
     fold_pattern = r'[a-zA-Z0-9_.-]+ folded'
     player_pattern = r'([a-zA-Z0-9_.-]+)'
     won_pattern = r'([a-zA-Z0-9_.-]+) won \d+(\.\d{1,2})? chips'
@@ -124,8 +119,7 @@ def parse_stats(hand_histories: str):
                         rfi_player.uopfr = (1, 1)
                     elif tb_player is None:
                         tb_player = player
-                        if not player.called_bb:
-                            tb_player.tb = (1, 1)
+                        tb_player.tb = (1, 1)
                     elif player.raised:
                         fb_player = player
                         fb_player.fb = (1, 1)
@@ -157,19 +151,24 @@ def parse_stats(hand_histories: str):
                     player.pfr = (0, 1) if player.pfr == (0, 0) else (1, 1)
                 line = f.readline()
 
-            first_bet_on_flop_player = ""
+            first_bet_on_flop_player = None
             while line and not re.match(turn_pattern, line):
-                # print(repr(line))
                 if re.match(won_pattern, line):
                     break
                 if re.match(bet_pattern, line):
-                    player = re.match(player_pattern, line).group(1)
-                    if first_bet_on_flop_player == "":
+                    player = game_players[re.match(player_pattern, line).group(1)]
+                    if first_bet_on_flop_player is None:
                         if player != last_raise_player:
-                            game_players[player].donk = (1, 1)
+                            player.donk = (1, 1)
                         else:
-                            game_players[player].cbet = (1, 1)
-
+                            player.cbet = (1, 1)
+                    first_bet_on_flop_player = player
+                elif re.match(check_pattern, line):
+                    player = game_players[re.match(player_pattern, line).group(1)]
+                    if first_bet_on_flop_player is None:
+                        player.donk = (0, 1)
+                    if player == last_raise_player and first_bet_on_flop_player is None:
+                        player.cbet = (0, 1)
                 line = f.readline()
             update_players(player_dict, game_players)
             game_players.clear()
@@ -178,7 +177,7 @@ def parse_stats(hand_histories: str):
 
 prev_latest_time = dt.min
 curr_latest_time = dt.strptime('2023-06-10 20:12:37', '%Y-%m-%d %H:%M:%S')
-parse_stats(r'/Users/brandondu/Downloads/Test5.txt')
+parse_stats(sys.argv[1])
 for p in all_players:
     print(all_players[p])
 
