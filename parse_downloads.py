@@ -32,7 +32,7 @@ def update_players(players_dict, game_players):
             players_dict[key] = player
 
 
-def parse_nets(in_and_outs: str):
+def parse_nets(in_and_outs: str):   # ledger
     global curr_latest_time
     df = pd.read_csv(in_and_outs, skiprows=1, skip_blank_lines=False)
 
@@ -52,7 +52,7 @@ def parse_nets(in_and_outs: str):
             game_players.append(Player(username=user, net=net))
 
 
-def parse_stats(hand_histories: str):
+def parse_stats(hand_histories: str):   # hand histories
     new_game_pattern = r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}: New hand \(ID [a-zA-Z0-9]+\) of NL Texas Holdem'
     time_pattern = r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}'
     bb_player_pattern = r'([a-zA-Z0-9_.-]+) \(\d+(\.\d{1,2})?, BB\)'
