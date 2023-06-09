@@ -1,5 +1,6 @@
 import re
 import time
+import os
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.action_chains import ActionChains
@@ -7,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 
 
@@ -53,9 +55,9 @@ def click_downloads(driver, link, stakes):
     action_chains.move_to_element_with_offset(canvas, download_x, download_y).click().perform()
     time.sleep(1)
     action_chains.move_to_element_with_offset(canvas, 0, 0).click().perform()
-    time.sleep(1)
+    time.sleep(0.5)
     action_chains.move_to_element_with_offset(canvas, 0, canvas_height * hand_histories_ratio).click().perform()
-    time.sleep(1000)
+    time.sleep(q)
 
 
 def download_logs():
@@ -108,5 +110,5 @@ def download_logs():
 
 try:
     download_logs()
-except Exception:
-    print('fucked up')
+except Exception as exc:
+    print(exc)
