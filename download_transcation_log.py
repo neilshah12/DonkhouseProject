@@ -59,7 +59,15 @@ def click_downloads(driver, link, stakes):
 
 
 def download_logs():
-    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    current_dir= os.getcwd()
+    download_dir = os.path.join(current_dir, 'logs')
+    prefs = {'download.default_directory': download_dir}
+
+
+    chrome_options = Options()
+    chrome_options.add_experimental_option('prefs', prefs)
+
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
     driver.maximize_window()
     driver.get('https://donkhouse.com/login')
 
