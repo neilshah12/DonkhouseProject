@@ -57,7 +57,7 @@ def click_downloads(driver, link, stakes):
     action_chains.move_to_element_with_offset(canvas, 0, 0).click().perform()
     time.sleep(0.5)
     action_chains.move_to_element_with_offset(canvas, 0, canvas_height * hand_histories_ratio).click().perform()
-    time.sleep(q)
+    time.sleep(1)
 
 
 def download_logs():
