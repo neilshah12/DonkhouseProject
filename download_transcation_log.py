@@ -105,7 +105,6 @@ def download_logs():
             stakes = div_list[1].text.strip()
             href = form.find(class_='panel-block has-text-white')['href']
             click_downloads(driver, 'https://donkhouse.com' + href, stakes)
-            return
 
 
 try:
