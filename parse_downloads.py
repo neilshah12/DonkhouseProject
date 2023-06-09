@@ -17,7 +17,6 @@ except (EOFError, FileNotFoundError):
 # curr_latest_time = prev_latest_time
 all_players: Dict[str, Player] = {}
 
-
 def update_latest_time():
     with open('last_time.pickle', 'wb') as f:
         pickle.dump(prev_latest_time, f)
