@@ -40,9 +40,6 @@ def click_downloads(driver, link, stakes, table_name):
     style = canvas.get_attribute('style')
     canvas_width = float(re.search(r"width:\s*([\d.]+)px", style).group(1))
     canvas_height = float(re.search(r"height:\s*([\d.]+)px", style).group(1))
-    #
-    # print(canvas_height)
-    # print(canvas_width)
 
     time.sleep(5)
     # Calculate button position within the canvas
@@ -56,9 +53,6 @@ def click_downloads(driver, link, stakes, table_name):
 
     action_chains = ActionChains(driver)
     action_chains.move_to_element_with_offset(canvas, download_x, download_y).click().perform()
-    #
-    # print(download_x)
-    # print(download_y)
 
     time.sleep(1)
 
@@ -100,7 +94,6 @@ def click_downloads(driver, link, stakes, table_name):
     print(latest_file)
     shutil.move(latest_file, os.path.join(download_dir, f"{table_name}_hand_histories.txt"))
     time.sleep(1)
-    print('Done')
 
 
 def download_logs():
@@ -146,7 +139,6 @@ def download_logs():
 
             table_name_div = form.find(class_='column is-one-third')
             table_name = table_name_div.find('u').text.strip()
-
             href = form.find(class_='panel-block has-text-white')['href']
             click_downloads(driver, 'https://donkhouse.com' + href, stakes, table_name)
 
