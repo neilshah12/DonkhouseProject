@@ -29,6 +29,8 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       run: pip install -r requirements.txt
     - uses: browser-actions/setup-chrome@latest
+    - name: Clear logs directory
+      run: rm -rf logs/*
     - name: Run script
       run: python download_transcation_log.py
     - name: Upload artifact
