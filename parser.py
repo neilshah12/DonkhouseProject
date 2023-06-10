@@ -35,7 +35,7 @@ def parse_nets(in_and_outs: str):   # ledger
     global curr_latest_time
     df = pd.read_csv(in_and_outs, skiprows=1, skip_blank_lines=False)
 
-    game_players = list()
+    game_players = Dict[str, Player] = {}
     for _, row in df.iterrows():
         user = row['User']
         net = row['Net']
@@ -48,7 +48,7 @@ def parse_nets(in_and_outs: str):   # ledger
             curr_latest_time = max(curr_latest_time, curr_end_time)
             update_players(all_players, game_players)
         elif not math.isnan(net):
-            game_players.append(Player(username=user, net=net))
+            game_players[user] = Player(username=user, net=net)
 
 
 def parse_stats(hand_histories: str):   # hand histories
