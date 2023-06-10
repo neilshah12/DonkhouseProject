@@ -49,8 +49,6 @@ def click_downloads(driver, link, stakes):
     download_x = round((download_x_ratio - 0.5) * canvas_width)
     download_y = round((download_y_ratio - 0.5) * canvas_height)
 
-    print(canvas_height)
-
     action_chains = ActionChains(driver)
     action_chains.move_to_element_with_offset(canvas, download_x, download_y).click().perform()
     time.sleep(1)
@@ -61,10 +59,9 @@ def click_downloads(driver, link, stakes):
 
 
 def download_logs():
-    current_dir= os.getcwd()
+    current_dir = os.getcwd()
     download_dir = os.path.join(current_dir, 'logs')
     prefs = {'download.default_directory': download_dir}
-
 
     chrome_options = Options()
     chrome_options.add_experimental_option('prefs', prefs)
@@ -105,8 +102,6 @@ def download_logs():
             stakes = div_list[1].text.strip()
             href = form.find(class_='panel-block has-text-white')['href']
             click_downloads(driver, 'https://donkhouse.com' + href, stakes)
-            return
-
 
 try:
     download_logs()
