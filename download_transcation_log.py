@@ -60,7 +60,6 @@ def click_downloads(driver, link, stakes, table_name):
 
 
     time.sleep(1)
-    exit(0)
 
 def download_logs():
     current_dir = os.getcwd()
