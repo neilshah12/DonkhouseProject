@@ -42,3 +42,10 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: transaction-logs
+    - name: Run parse.py for each log file
+      run: |
+        cd logs/
+        for file in *; do
+          python parser.py "$file"
+        done
+    
