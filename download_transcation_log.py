@@ -113,8 +113,6 @@ def download_logs():
 
             table_name_div = form.find(class_='column is-one-third')
             table_name = table_name_div.find('u')
-            if table_name.text.strip() != 'test' and table_name.text.strip() != 'Degen':
-                continue
             href = form.find(class_='panel-block has-text-white')['href']
             click_downloads(driver, 'https://donkhouse.com' + href, stakes, table_name)
 
