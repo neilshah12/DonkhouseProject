@@ -39,9 +39,6 @@ def click_downloads(driver, link, stakes, table_name):
     canvas_width = float(re.search(r"width:\s*([\d.]+)px", style).group(1))
     canvas_height = float(re.search(r"height:\s*([\d.]+)px", style).group(1))
 
-    print(canvas_height)
-    print(canvas_width)
-
     time.sleep(5)
     # Calculate button position within the canvas
     download_x_ratio = download_x_ratios[stakes]
@@ -54,10 +51,7 @@ def click_downloads(driver, link, stakes, table_name):
 
     action_chains = ActionChains(driver)
     action_chains.move_to_element_with_offset(canvas, download_x, download_y).click().perform()
-
-    print(download_x)
-    print(download_y)
-
+    
     time.sleep(1)
     action_chains.move_to_element_with_offset(canvas, 0, 0).click().perform()
 
@@ -66,7 +60,7 @@ def click_downloads(driver, link, stakes, table_name):
 
 
     time.sleep(1)
-    print('Done')
+    exit(0)
 
 def download_logs():
     current_dir = os.getcwd()
