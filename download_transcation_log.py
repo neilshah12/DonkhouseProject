@@ -17,17 +17,17 @@ download_x_ratios = {
     '0.1/0.2': 170 / 847,
     '0.25/0.5': 174 / 847,
     '0.5/1': 162 / 847,
-    '1/2': 153 / 847,
-    '1/3': 153 / 847,
-    '2/4': 153 / 847,
-    '2/5': 153 / 847,
-    '3/5': 153 / 847,
-    '3/6': 153 / 847,
-    '4/8': 153 / 847
+    '1/2': 150 / 847,
+    '1/3': 150 / 847,
+    '2/4': 150 / 847,
+    '2/5': 150 / 847,
+    '3/5': 150 / 847,
+    '3/6': 150 / 847,
+    '4/8': 150 / 847
 }
 
 
-def click_downloads(driver, link, stakes):
+def click_downloads(driver, link, stakes, table_name):
     driver.get(link)
 
     wait = WebDriverWait(driver, 10)
@@ -39,24 +39,34 @@ def click_downloads(driver, link, stakes):
     canvas_width = float(re.search(r"width:\s*([\d.]+)px", style).group(1))
     canvas_height = float(re.search(r"height:\s*([\d.]+)px", style).group(1))
 
+    print(canvas_height)
+    print(canvas_width)
+
     time.sleep(5)
     # Calculate button position within the canvas
     download_x_ratio = download_x_ratios[stakes]
     download_y_ratio = 40 / 529.375
 
-    hand_histories_ratio = 1 / 23
+    hand_histories_ratio = 1 / 30
 
     download_x = round((download_x_ratio - 0.5) * canvas_width)
     download_y = round((download_y_ratio - 0.5) * canvas_height)
 
     action_chains = ActionChains(driver)
     action_chains.move_to_element_with_offset(canvas, download_x, download_y).click().perform()
+
+    print(download_x)
+    print(download_y)
+
     time.sleep(1)
     action_chains.move_to_element_with_offset(canvas, 0, 0).click().perform()
+
     time.sleep(0.5)
     action_chains.move_to_element_with_offset(canvas, 0, canvas_height * hand_histories_ratio).click().perform()
-    time.sleep(1)
 
+
+    time.sleep(1)
+    print('Done')
 
 def download_logs():
     current_dir = os.getcwd()
@@ -100,9 +110,15 @@ def download_logs():
             continue
         else:
             stakes = div_list[1].text.strip()
+
+            table_name_div = form.find(class_='column is-one-third')
+            table_name = table_name_div.find('u')
+            if table_name.text.strip() != 'test' and table_name.text.strip() != 'Degen':
+                continue
             href = form.find(class_='panel-block has-text-white')['href']
-            click_downloads(driver, 'https://donkhouse.com' + href, stakes)
-            
+            click_downloads(driver, 'https://donkhouse.com' + href, stakes, table_name)
+
+
 try:
     download_logs()
 except Exception as exc:
