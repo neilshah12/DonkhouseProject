@@ -35,7 +35,7 @@ def parse_nets(in_and_outs: str):   # ledger
     global curr_latest_time
     df = pd.read_csv(in_and_outs, skiprows=1, skip_blank_lines=False)
 
-    game_players = Dict[str, Player] = {}
+    game_players : Dict[str, Player] = {}
     for _, row in df.iterrows():
         user = row['User']
         net = row['Net']
