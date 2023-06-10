@@ -178,7 +178,7 @@ def parse_stats(hand_histories: str):   # hand histories
 
 prev_latest_time = dt.min
 curr_latest_time = dt.strptime('2023-06-10 20:12:37', '%Y-%m-%d %H:%M:%S')
-if re.match(r'^chip', sys.argv[1]):
+if re.search(r'chip', sys.argv[1]):
     parse_nets(sys.argv[1])
 else:
     parse_stats(sys.argv[1])
