@@ -46,6 +46,8 @@ jobs:
       run: |
         cd logs/
         for file in *; do
+          cd ../
           python parser.py "$file"
+          cd logs/
         done
     
