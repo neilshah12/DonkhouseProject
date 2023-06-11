@@ -32,7 +32,7 @@ jobs:
     - name: Clear logs directory
       run: rm -rf logs/*
     - name: Run script
-      run: python download_transcation_log.py
+      run: python download_files.py
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:

@@ -14,6 +14,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.options import Options
 from bs4 import BeautifulSoup
 
+
 download_x_ratios = {
     '0.01/0.02': 178 / 847,
     '0.1/0.2': 168 / 847,
@@ -32,7 +33,7 @@ download_x_ratios = {
 def click_downloads(driver, link, stakes, table_name):
     driver.get(link)
 
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 20)
     canvas_locator = (By.TAG_NAME, 'canvas')
     wait.until(EC.presence_of_element_located(canvas_locator))
 
@@ -42,9 +43,10 @@ def click_downloads(driver, link, stakes, table_name):
     canvas_height = float(re.search(r"height:\s*([\d.]+)px", style).group(1))
 
     time.sleep(5)
+
     # Calculate button position within the canvas
     download_x_ratio = download_x_ratios[stakes]
-    download_y_ratio = 40 / 529.375
+    download_y_ratio = 64 / 847
 
     hand_histories_ratio = 1 / 30
 
@@ -67,15 +69,15 @@ def click_downloads(driver, link, stakes, table_name):
     time_counter = 0
     while latest_file is None or '.part' in latest_file or len(all_files) == prev_len:
         time.sleep(0.5)
-        all_files = glob.glob(download_dir + '/*')
+        all_files = glob.glob(f'{download_dir}/*')
         if len(all_files) > 0:
             latest_file = max(all_files, key=os.path.getctime)
         time_counter += 0.5
         if time_counter >= 5:
-            raise Exception(f"Could not download {table_name} ledger in less than 5 seconds")
+            raise Exception(f'Could not download {table_name} ledger in less than 5 seconds')
 
     print(latest_file)
-    shutil.move(latest_file, os.path.join(download_dir, f"{table_name}_ledger.txt"))
+    shutil.move(latest_file, os.path.join(download_dir, f'{table_name}_ledger.csv'))
     prev_len += 1
 
     action_chains.move_to_element_with_offset(canvas, 0, canvas_height * hand_histories_ratio).click().perform()
@@ -89,10 +91,10 @@ def click_downloads(driver, link, stakes, table_name):
             latest_file = max(all_files, key=os.path.getctime)
         time_counter += 0.5
         if time_counter >= 5:
-            raise Exception(f"Could not download {table_name} hand histories in less than 5 seconds")
+            raise Exception(f'Could not download {table_name} hand histories in less than 5 seconds')
 
     print(latest_file)
-    shutil.move(latest_file, os.path.join(download_dir, f"{table_name}_hand_histories.txt"))
+    shutil.move(latest_file, os.path.join(download_dir, f'{table_name}_hand_histories.txt'))
     time.sleep(1)
 
 

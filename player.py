@@ -11,7 +11,6 @@ class Player:
         self.tb = (0, 0)
         self.fb = (0, 0)
         self.f3b = (0, 0)
-        self.f4b = (0, 0)
         self.cbet = (0, 0)
         self.donk = (0, 0)
         self.raised = False
@@ -41,11 +40,12 @@ class Player:
         if not isinstance(other, Player) or self.username != other.username:
             return
         self.net += other.net
+
         self.vpip = tuple(map(lambda i, j: i + j, self.vpip, other.vpip))
-        self.uopfr = tuple(map(lambda i, j: i + j, self.pfr, other.pfr))
         self.pfr = tuple(map(lambda i, j: i + j, self.pfr, other.pfr))
+        self.uopfr = tuple(map(lambda i, j: i + j, self.uopfr, other.uopfr))
         self.tb = tuple(map(lambda i, j: i + j, self.tb, other.tb))
         self.fb = tuple(map(lambda i, j: i + j, self.fb, other.fb))
-        self.cbet = tuple(map(lambda i, j: i + j, self.cbet, other.cbet))
         self.f3b = tuple(map(lambda i, j: i + j, self.f3b, other.f3b))
+        self.cbet = tuple(map(lambda i, j: i + j, self.cbet, other.cbet))
         self.donk = tuple(map(lambda i, j: i + j, self.donk, other.donk))
