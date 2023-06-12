@@ -62,7 +62,7 @@ def parse_nets(ledger, info):  # ledger
             new_latest_time = max(new_latest_time, game_end_time)
             update_players(all_players, game_players)
         elif not math.isnan(net):
-            game_players[user] = Player(user)
+            game_players[user] = Player(user, net=net)
 
     if new_latest_time > latest_parsed_time:
         info[f'{table} latest parsed time'] = new_latest_time
