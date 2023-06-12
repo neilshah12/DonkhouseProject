@@ -35,7 +35,8 @@ class Player:
                f"4-Bet: {self.fb}, " \
                f"F3B: {self.f3b}, " \
                f"C-Bet: {self.cbet}, " \
-               f"Donk Bet: {self.donk}"
+               f"Donk Bet: {self.donk}, " \
+               f"LIM: {self.lim}"
 
     def update(self, other):
         if not isinstance(other, Player) or self.username != other.username:
@@ -50,3 +51,4 @@ class Player:
         self.f3b = tuple(map(lambda i, j: i + j, self.f3b, other.f3b))
         self.cbet = tuple(map(lambda i, j: i + j, self.cbet, other.cbet))
         self.donk = tuple(map(lambda i, j: i + j, self.donk, other.donk))
+        self.lim = tuple(map(lambda i, j: i + j, self.lim, other.lim))
