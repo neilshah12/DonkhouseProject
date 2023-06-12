@@ -1,0 +1,143 @@
+
+2023-06-08 22:28:20: New hand (ID hYNIgdPB3PkTeJU2) of NL Texas Holdem
+zanezoki (1109.75, SB),
+stepdealer (755.25, BB) are in the hand.
+stepdealer posted 0.25
+zanezoki posted 0.5
+stepdealer raised to 1.5
+zanezoki called 1
+board: K♣ J♦ 7♠ 
+zanezoki bet 1
+stepdealer called 1
+board: K♣ J♦ 7♠ Q♣ 
+zanezoki bet 3
+stepdealer raised to 14
+zanezoki called 11
+board: K♣ J♦ 7♠ Q♣ 4♥ 
+zanezoki checked
+stepdealer checked
+zanezoki showed 3♣ J♣ (pair)
+stepdealer mucked
+zanezoki won 33 chips
+
+2023-06-08 22:28:46: New hand (ID XHMBDNlHtlHRKJ5K) of NL Texas Holdem
+stepdealer (738.75, SB),
+zanezoki (1126.25, BB) are in the hand.
+zanezoki posted 0.25
+stepdealer posted 0.5
+zanezoki folded
+stepdealer won 0.75 chips
+
+2023-06-08 22:28:56: New hand (ID mTWawpLcbkTgsUmW) of NL Texas Holdem
+zanezoki (1126, SB),
+stepdealer (739, BB) are in the hand.
+stepdealer posted 0.25
+zanezoki posted 0.5
+stepdealer raised to 1.5
+zanezoki raised to 4.25
+stepdealer called 2.75
+board: 4♥ A♠ Q♣ 
+zanezoki bet 2.5
+stepdealer folded
+zanezoki won 11 chips
+
+2023-06-08 22:29:21: New hand (ID UcBTRHJu8OjKDGTb) of NL Texas Holdem
+stepdealer (734.75, SB),
+zanezoki (1130.25, BB) are in the hand.
+zanezoki posted 0.25
+stepdealer posted 0.5
+zanezoki raised to 1.75
+stepdealer called 1.25
+board: 10♦ 2♥ J♣ 
+stepdealer checked
+zanezoki bet 1.25
+stepdealer folded
+zanezoki won 4.75 chips
+
+2023-06-08 22:29:40: New hand (ID CSQhjavBrYEXpUaQ) of NL Texas Holdem
+zanezoki (1132, SB),
+stepdealer (733, BB) are in the hand.
+stepdealer posted 0.25
+zanezoki posted 0.5
+stepdealer raised to 1.5
+zanezoki folded
+stepdealer won 2 chips
+
+2023-06-08 22:29:47: New hand (ID pQ0HOMBWqNxALLO5) of NL Texas Holdem
+stepdealer (733.5, SB),
+zanezoki (1131.5, BB) are in the hand.
+zanezoki posted 0.25
+stepdealer posted 0.5
+zanezoki raised to 1.75
+stepdealer folded
+zanezoki won 2.25 chips
+
+2023-06-08 22:29:59: New hand (ID kZ3dlyzWVqIn8ow7) of NL Texas Holdem
+zanezoki (1132, SB),
+stepdealer (733, BB) are in the hand.
+stepdealer posted 0.25
+zanezoki posted 0.5
+stepdealer raised to 1.5
+zanezoki called 1
+board: 4♦ 6♥ 8♠ 
+zanezoki checked
+stepdealer checked
+board: 4♦ 6♥ 8♠ Q♠ 
+zanezoki checked
+stepdealer checked
+board: 4♦ 6♥ 8♠ Q♠ 10♦ 
+zanezoki checked
+stepdealer checked
+zanezoki showed 2♣ 4♣ (pair)
+stepdealer mucked
+zanezoki won 3 chips
+
+2023-06-08 22:30:34: New hand (ID nMPUKe9pP1NSAXjI) of NL Texas Holdem
+stepdealer (731.5, SB),
+zanezoki (1133.5, BB) are in the hand.
+zanezoki posted 0.25
+stepdealer posted 0.5
+zanezoki raised to 1.75
+stepdealer raised to 7
+zanezoki folded
+stepdealer won the 72 bounty
+zanezoki paid 1.5
+stepdealer won 10.25 chips
+
+2023-06-08 22:30:49: New hand (ID v8QO22s6aNF5Ydhk) of NL Texas Holdem
+zanezoki (1130.25, SB),
+stepdealer (734.75, BB) are in the hand.
+stepdealer posted 0.25
+zanezoki posted 0.5
+stepdealer raised to 1.5
+zanezoki folded
+stepdealer won 2 chips
+
+2023-06-08 22:30:59: New hand (ID xAUf3paMblsFTOxJ) of NL Texas Holdem
+stepdealer (735.25, SB),
+zanezoki (1129.75, BB) are in the hand.
+zanezoki posted 0.25
+stepdealer posted 0.5
+zanezoki folded
+stepdealer won 0.75 chips
+
+2023-06-08 22:31:05: New hand (ID r277iIV7X7DOy6vF) of NL Texas Holdem
+zanezoki (1129.5, SB),
+stepdealer (735.5, BB) are in the hand.
+stepdealer posted 0.25
+zanezoki posted 0.5
+stepdealer raised to 1.5
+zanezoki called 1
+board: 8♥ K♥ 9♣ 
+zanezoki bet 0.75
+stepdealer called 0.75
+board: 8♥ K♥ 9♣ 3♥ 
+zanezoki bet 2.25
+stepdealer called 2.25
+board: 8♥ K♥ 9♣ 3♥ 7♣ 
+zanezoki checked
+stepdealer checked
+zanezoki showed Q♣ 2♣ (high card)
+stepdealer showed 8♣ J♦ (pair)
+stepdealer won 9 chips
+2023-06-08 22:31:37: The game has ended
