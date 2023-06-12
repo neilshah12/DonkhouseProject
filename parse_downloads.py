@@ -11,8 +11,12 @@ import sys
 all_players: Dict[str, Player] = {}
 
 
-def load_info():
+def init_info():
     with open('info.pickle', 'wb') as f:
+        pickle.dump({}, f)
+
+def load_info():
+    with open('info.pickle', 'rb') as f:
         return pickle.load(f)
 
 
@@ -30,11 +34,10 @@ def update_players(players_dict, game_players):
             players_dict[key] = player
 
 
-def parse_nets(in_and_outs, info):  # ledger
-    table = re.search(r'(.*?)_ledger.csv').group()
-    if table is None:
-        return
-    df = pd.read_csv(in_and_outs, skiprows=1, skip_blank_lines=False)
+def parse_nets(ledger, info):  # ledger
+    table = re.search(r'(.*?)_ledger.csv', ledger).group(1)
+
+    df = pd.read_csv(ledger, skiprows=1, skip_blank_lines=False)
 
     if f'{table} latest parsed time' in info:
         latest_parsed_time = info[f'{table} latest parsed time']
@@ -64,7 +67,7 @@ def parse_nets(in_and_outs, info):  # ledger
 def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
     patterns = {
         'new_game': r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}: New hand \(ID [a-zA-Z0-9]+\) of NL Texas Holdem',
-        'time': r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}',
+        'time': r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})',
         'bb_player': r'([a-zA-Z0-9_.-]+) \(\d+(\.\d{1,2})?, BB\)',
         'in_hand': r'[a-zA-Z0-9_.-]+ \(\d+(\.\d{1,2})?, [A-Z0-9+]+\)',
         'bb_post': r'[a-zA-Z0-9_.-]+ posted (\d+(\.\d{1,2})?)',
@@ -85,15 +88,12 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
         'table': r'(.*?)_hand_histories.txt'
     }
 
-    table = re.search(patterns['table'], hand_histories).group()
-    if table is None:
-        return
-
-    # prev_latest_time = prev_info[f'{table} latest parsed time']
-    # curr_latest_time = curr_info[f'{table} latest parsed time']
-
-    prev_latest_time = dt.min  # for testing purposes
-    curr_latest_time = dt.max  # for testing purposes
+    table = re.search(r'(.*?)_hand_histories.txt', hand_histories).group(1)
+    if f'{table} latest parsed time' in prev_info:
+        prev_latest_time = prev_info[f'{table} latest parsed time']
+    else:
+        prev_latest_time = dt.min
+    curr_latest_time = curr_info[f'{table} latest parsed time']
 
     with open(hand_histories, 'r') as f:
         player_dict: Dict[str, Player] = {}
@@ -101,7 +101,7 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
         for line in f:
             if not re.search(patterns['new_game'], line):
                 continue
-            time = dt.strptime(re.search(patterns['time'], line).group(), '%Y-%m-%d %H:%M:%S')
+            time = dt.strptime(re.search(patterns['time'], line).group(1), '%Y-%m-%d %H:%M:%S')
             if time <= prev_latest_time:
                 continue
             elif time > curr_latest_time:
@@ -123,6 +123,7 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
             is_walk = True
             rfi_player, tb_player, fb_player, last_raise_player = None, None, None, None
 
+            num_players_in_hand = len(game_players)
             # preflop
             while line and not re.match(patterns['flop'], line):
                 if re.match(patterns['won'], line):
@@ -138,6 +139,7 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
                     if rfi_player is None:
                         rfi_player = player
                         rfi_player.uopfr = (1, 1)
+                        rfi_player.lim = (0, 1)
                     elif tb_player is None:
                         tb_player = player
                         tb_player.tb = (1, 1)
@@ -156,7 +158,7 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
 
                     if rfi_player is None:
                         player.uopfr = (0, 1)
-                        player.called_bb = True
+                        player.lim = (1, 1)
                     elif tb_player is None:
                         player.tb = (0, 1)
                     elif fb_player is None:
@@ -174,6 +176,7 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
 
                     if rfi_player is None:
                         player.uopfr = (0, 1)
+                        player.lim = (0, 1)
                     elif tb_player is None:
                         player.tb = (0, 1)
                     elif fb_player is None:
@@ -181,9 +184,29 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
                             player.f3b = (1, 1)
                         player.fb = (0, 1)
 
+                    num_players_in_hand -= 1
+
                 line = f.readline()
 
             first_bet_on_flop_player = None
+
+            if num_players_in_hand < 3:
+                if f'{table} hands reached flop with 3+ players' in curr_info:
+                    percent = curr_info[f'{table} hands reached flop with 3+ players']
+                    num = percent[0] + 0
+                    denom = percent[1] + 1
+                    curr_info[f'{table} hands reached flop with 3+ players'] = (num, denom)
+                else:
+                    curr_info[f'{table} hands reached flop with 3+ players'] = (0, 1)
+            else:
+                if f'{table} hands reached flop with 3+ players' in curr_info:
+                    percent = curr_info[f'{table} hands reached flop with 3+ players']
+                    num = percent[0] + 1
+                    denom = percent[1] + 1
+                    curr_info[f'{table} hands reached flop with 3+ players'] = (num, denom)
+                else:
+                    curr_info[f'{table} hands reached flop with 3+ players'] = (1, 1)
+
             while line and not re.match(patterns['turn'], line):
                 if re.match(patterns['won'], line):
                     break
@@ -211,12 +234,19 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
 def main():
     prev_info = load_info()
     curr_info = prev_info.copy()
-
     parse_nets(sys.argv[2], curr_info)
     parse_stats(sys.argv[1], prev_info, curr_info)
 
+    for player in all_players:
+        print(all_players[player])
+
     update_pickle_info(curr_info)
+
+    info = load_info()
+    print(info)
+
 
 
 if __name__ == '__main__':
     main()
+#

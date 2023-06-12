@@ -13,8 +13,9 @@ class Player:
         self.f3b = (0, 0)
         self.cbet = (0, 0)
         self.donk = (0, 0)
+        self.lim = (0, 0)
         self.raised = False
-        self.called_bb = False
+
 
     def __eq__(self, other):
         if isinstance(other, Player):
