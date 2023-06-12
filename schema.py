@@ -11,9 +11,9 @@ association_table=Table(
     Column('player_id', ForeignKey('players.id')),
     Column('game_id', ForeignKey('games.id'))
 )
-class Player(Base):
+class Player_Table(Base):
     __tablename__ = "players"
-    id = Column("id", Integer, primary_key=True)
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
     username = Column("username", String)
     net = Column("net", Float)
     VPIP_num = Column("VPIP_num", Integer)
@@ -40,11 +40,10 @@ class Player(Base):
         back_populates='players'
     )
     
-    def __init__(self, id, username, net, VPIP_num, VPIP_denom, UOPFR_num, UOPFR_denom, PFR_num, PFR_denom, \
+    def __init__(self, username, net, VPIP_num, VPIP_denom, UOPFR_num, UOPFR_denom, PFR_num, PFR_denom, \
                  threebet_num, threebet_denom, fourbet_num, fourbet_denom, fold_to_three_num, fold_to_three_denom, c_bet_num, \
                  c_bet_denom, donk_num, donk_denom, limp_num, limp_denom
         ):
-        self.id = id
         self.username = username
         self.net = net
         self.VPIP_num = VPIP_num
@@ -76,30 +75,27 @@ class Player(Base):
 
 class Game(Base):
     __tablename__="games"
-    id = Column("id", Integer, primary_key=True)
+    id = Column("id", Integer, primary_key=True, autoincrement=True)
     date = Column("date", Date)
     name = Column("name", String)
     players = relationship(
-        'Players',
+        'Player_Table',
         secondary=association_table,
         back_populates='games'
     )
     
-    def __init__(self, id, date, name):
-        self.id = id
+    def __init__(self, date, name):
         self.date = date
         self.name = name
     
     def __repr__(self):
         return f"Game(id={self.id}, date={self.date}, name='{self.name}')"
-    
 
 engine = create_engine("sqlite:///mydb.db", echo=True)
 Base.metadata.create_all(bind=engine)
-
 # Session = sessionmaker(bind=engine)
 # session = Session()
-
+engine.dispose()
 # p1 = Player(1, "stepdealer", 150, 0, 0)
 # session.add(p1)
 # session.commit()
