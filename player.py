@@ -42,7 +42,6 @@ class Player:
         if not isinstance(other, Player) or self.username != other.username:
             return
         self.net += other.net
-
         self.vpip = tuple(map(lambda i, j: i + j, self.vpip, other.vpip))
         self.pfr = tuple(map(lambda i, j: i + j, self.pfr, other.pfr))
         self.uopfr = tuple(map(lambda i, j: i + j, self.uopfr, other.uopfr))

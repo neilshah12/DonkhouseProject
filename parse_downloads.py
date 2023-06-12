@@ -1,9 +1,9 @@
 from datetime import datetime as dt
 from typing import Dict
 from player import Player
-from schema import Player_Table
-from sqlalchemy import create_engine, update
-from sqlalchemy.orm import sessionmaker
+# from schema import Player_Table
+# from sqlalchemy import create_engine, update
+# from sqlalchemy.orm import sessionmaker
 import math
 import pandas as pd
 import pickle
@@ -11,13 +11,15 @@ import re
 import sys
 
 all_players: Dict[str, Player] = {}
-engine = create_engine('sqlite:///mydb.db')
-Session = sessionmaker(bind=engine)
-session = Session()
+# engine = create_engine('sqlite:///mydb.db')
+# Session = sessionmaker(bind=engine)
+# session = Session()
+
 
 def init_info():
     with open('info.pickle', 'wb') as f:
         pickle.dump({}, f)
+
 
 def load_info():
     with open('info.pickle', 'rb') as f:
@@ -242,60 +244,63 @@ def main():
     parse_nets(sys.argv[2], curr_info)
     parse_stats(sys.argv[1], prev_info, curr_info)
 
-    for play in all_players:   
+    for play in all_players:
         player = all_players[play]
-        existing_row = session.query(Player_Table).filter_by(username=player.username).first()
+        print(player)
+        # existing_row = session.query(Player_Table).filter_by(username=player.username).first()
+        #
+        # if existing_row:
+        #     stmt = update(Player_Table).where(Player_Table.username == player.username).values(
+        #         net=Player_Table.net + player.net,
+        #         VPIP_num=Player_Table.VPIP_num + player.vpip[0],
+        #         VPIP_denom=Player_Table.VPIP_denom + player.vpip[1],
+        #         UOPFR_num=Player_Table.UOPFR_num + player.uopfr[0],
+        #         UOPFR_denom=Player_Table.UOPFR_denom + player.uopfr[1],
+        #         PFR_num=Player_Table.PFR_num + player.pfr[0],
+        #         PFR_denom=Player_Table.PFR_denom + player.pfr[1],
+        #         threebet_num=Player_Table.threebet_num + player.tb[0],
+        #         threebet_denom=Player_Table.threebet_denom + player.tb[1],
+        #         fourbet_num=Player_Table.fourbet_num + player.fb[0],
+        #         fourbet_denom=Player_Table.fourbet_denom + player.fb[1],
+        #         fold_to_three_num=Player_Table.fold_to_three_num + player.f3b[0],
+        #         fold_to_three_denom=Player_Table.fold_to_three_denom + player.f3b[1],
+        #         c_bet_num=Player_Table.c_bet_num + player.cbet[0],
+        #         c_bet_denom=Player_Table.c_bet_denom + player.cbet[1],
+        #         donk_num=Player_Table.donk_num + player.donk[0],
+        #         donk_denom=Player_Table.donk_denom + player.donk[1],
+        #         limp_num=Player_Table.limp_num + player.lim[0],
+        #         limp_denom=Player_Table.limp_denom + player.lim[1])
+        #     session.execute(stmt)
+        #     session.commit()
+        # else:
+        #     new_row = Player_Table(username=player.username, net=player.net,
+        #                            VPIP_num=player.vpip[0],
+        #                            VPIP_denom=player.vpip[1],
+        #                            UOPFR_num=player.uopfr[0],
+        #                            UOPFR_denom=player.uopfr[1],
+        #                            PFR_num=player.pfr[0],
+        #                            PFR_denom=player.pfr[1],
+        #                            threebet_num=player.tb[0],
+        #                            threebet_denom=player.tb[1],
+        #                            fourbet_num=player.fb[0],
+        #                            fourbet_denom=player.fb[1],
+        #                            fold_to_three_num=player.f3b[0],
+        #                            fold_to_three_denom=player.f3b[1],
+        #                            c_bet_num=player.cbet[0],
+        #                            c_bet_denom=player.cbet[1],
+        #                            donk_num=player.donk[0],
+        #                            donk_denom=player.donk[1],
+        #                            limp_num=player.lim[0],
+        #                            limp_denom=player.lim[1])
+        #     session.add(new_row)
+        #     session.commit()
+        print(all_players[play])
 
-        if existing_row:
-            stmt = update(Player_Table).where(Player_Table.username == player.username).values(net=Player_Table.net+player.net,
-                                                                                            VPIP_num=Player_Table.VPIP_num+player.vpip[0],
-                                                                                            VPIP_denom=Player_Table.VPIP_denom+player.vpip[1],
-                                                                                            UOPFR_num=Player_Table.UOPFR_num+player.uopfr[0],
-                                                                                            UOPFR_denom=Player_Table.UOPFR_denom+player.uopfr[1],
-                                                                                            PFR_num=Player_Table.PFR_num+player.pfr[0],
-                                                                                            PFR_denom=Player_Table.PFR_denom+player.pfr[1],
-                                                                                            threebet_num=Player_Table.threebet_num+player.tb[0],
-                                                                                            threebet_denom=Player_Table.threebet_denom+player.tb[1],
-                                                                                            fourbet_num=Player_Table.fourbet_num+player.fb[0],
-                                                                                            fourbet_denom=Player_Table.fourbet_denom+player.fb[1],
-                                                                                            fold_to_three_num = Player_Table.fold_to_three_num + player.f3b[0], 
-                                                                                            fold_to_three_denom = Player_Table.fold_to_three_denom + player.f3b[1], 
-                                                                                            c_bet_num = Player_Table.c_bet_num + player.cbet[0],
-                                                                                            c_bet_denom = Player_Table.c_bet_denom + player.cbet[1],
-                                                                                            donk_num = Player_Table.donk_num + player.donk[0], 
-                                                                                            donk_denom = Player_Table.donk_denom + player.donk[1],
-                                                                                            limp_num=Player_Table.limp_num + player.lim[0],
-                                                                                            limp_denom = Player_Table.limp_denom + player.lim[1])
-            session.execute(stmt)
-            session.commit()
-        else:
-            new_row = Player_Table(username=player.username, net=player.net,
-                                    VPIP_num=player.vpip[0],
-                                    VPIP_denom=player.vpip[1],
-                                    UOPFR_num=player.uopfr[0],
-                                    UOPFR_denom=player.uopfr[1],
-                                    PFR_num=player.pfr[0],
-                                    PFR_denom=player.pfr[1],
-                                    threebet_num=player.tb[0],
-                                    threebet_denom=player.tb[1],
-                                    fourbet_num=player.fb[0],
-                                    fourbet_denom=player.fb[1],
-                                    fold_to_three_num = player.f3b[0], 
-                                    fold_to_three_denom = player.f3b[1], 
-                                    c_bet_num = player.cbet[0],
-                                    c_bet_denom = player.cbet[1],
-                                    donk_num = player.donk[0], 
-                                    donk_denom = player.donk[1],
-                                    limp_num= player.lim[0],
-                                    limp_denom = player.lim[1])
-            session.add(new_row)
-            session.commit()
-        
     update_pickle_info(curr_info)
-    session.close()
-    engine.dispose()
+    # session.close()
+    # engine.dispose()
     info = load_info()
+
 
 if __name__ == '__main__':
     main()
-
