@@ -45,8 +45,8 @@ jobs:
     - name: Run parse.py for each log file
       run: |
         files=(logs/*)
-        for ((i=0; i<${#files[@]}; i+=2)); do
-          hand_histories=${files[i]}
-          ledger=${files[i+1]}
-          python parse_downloads.py "$ledger" "$hand_histories"
+        for ((i=1; i<=${#files[@]}; i+=2)); do
+          hand_histories="${files[i]}"
+          ledger="${files[i+1]}"
+          python parse_downloads.py "$hand_histories" "$ledger" 
         done
