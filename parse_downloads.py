@@ -41,6 +41,7 @@ def update_players(players_dict, game_players):
 
 
 def parse_nets(ledger, info):  # ledger
+    print(f'ledger: {ledger}')
     table = re.search(r'logs/(.*?)_ledger.csv', ledger).group(1)
     df = pd.read_csv(ledger, skiprows=1, skip_blank_lines=False)
 
@@ -92,7 +93,7 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
         'won': r'([a-zA-Z0-9_.-]+) won \d+(\.\d{1,2})? chips',
         'table': r'(.*?)_hand_histories.txt'
     }
-
+    print(f'hand_histories: {hand_histories}')
     table = re.search(r'logs/(.*?)_hand_histories.txt', hand_histories).group(1)
     if f'{table} latest parsed time' in prev_info:
         prev_latest_time = prev_info[f'{table} latest parsed time']
@@ -302,4 +303,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    try:
+        main()
+    except Exception:
+        pass
