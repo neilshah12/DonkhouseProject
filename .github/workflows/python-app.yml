@@ -48,5 +48,5 @@ jobs:
         for ((i=0; i<${#files[@]}; i+=2)); do
           hand_histories=${files[i]}
           ledger=${files[i+1]}
-          python parser.py "$ledger" "$hand_histories"
+          python parse_downloads.py "$ledger" "$hand_histories"
         done
