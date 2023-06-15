@@ -35,7 +35,7 @@ class Player_Table(Base):
     limp_num = Column("limp_num", Integer)
     limp_denom = Column("limp_denom", Integer)
     games = relationship(
-        'Game', 
+        'Game_Table', 
         secondary=association_table,
         back_populates='players'
     )
@@ -73,7 +73,7 @@ class Player_Table(Base):
                f"C-Bet={self.c_bet_num}/{self.c_bet_denom}, Donk={self.donk_num}/{self.donk_denom}, " \
                f"Limp={self.limp_num}/{self.limp_denom})"
 
-class Game(Base):
+class Game_Table(Base):
     __tablename__="games"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     date = Column("date", Date)

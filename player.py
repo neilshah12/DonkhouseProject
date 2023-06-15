@@ -52,3 +52,14 @@ class Player:
         self.cbet = tuple(map(lambda i, j: i + j, self.cbet, other.cbet))
         self.donk = tuple(map(lambda i, j: i + j, self.donk, other.donk))
         self.lim = tuple(map(lambda i, j: i + j, self.lim, other.lim))
+
+class Game:
+    def __init__(self, date, name):
+        self.date = date
+        self.name = name
+        self.players = []
+    
+    def __str__(self):
+        return f"Game: {self.name}, Date: {self.date}, Players: {self.players}"
+    
+    
