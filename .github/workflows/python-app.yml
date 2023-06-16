@@ -42,10 +42,11 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: transaction-logs
+    - name: Cleanup log folder
+      run: find ./logs \( -type f \! -name "*_ledger.csv" -a \! -name "*_hand_histories.txt" -o -size 0 \) -delete
     - name: Run parse.py for each log file
       run: |
         files=(logs/*)
-        echo ${#files[@]}
         for ((i=0; i<${#files[@]}; i+=2)); do
           hand_histories="${files[i]}"
           ledger="${files[i+1]}"
