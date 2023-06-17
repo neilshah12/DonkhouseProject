@@ -52,8 +52,8 @@ jobs:
           ledger="${files[i+1]}"
           python parse_downloads.py "$hand_histories" "$ledger" 
         done
-    - name: Push info.pickle
+    - name: Push info.pickle and database
       run: |
-        git add info.pickle
-        git commit -m 'updated info.pickle' 
+        git add info.pickle mydb.db
+        git commit -m 'updated data' 
         git push 
