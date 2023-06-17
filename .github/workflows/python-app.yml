@@ -42,12 +42,18 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: transaction-logs
+    - name: Error check and cleanup log folder
+      run: find ./logs \( -type f \! -name "*_ledger.csv" -a \! -name "*_hand_histories.txt" -o -size 0 \) -delete
     - name: Run parse.py for each log file
       run: |
         files=(logs/*)
-        echo ${#files[@]}
         for ((i=0; i<${#files[@]}; i+=2)); do
           hand_histories="${files[i]}"
           ledger="${files[i+1]}"
           python parse_downloads.py "$hand_histories" "$ledger" 
         done
+    - name: Push info.pickle
+      run: |
+        git add info.pickle
+        git commit -m 'updated info.pickle' 
+        git push 
