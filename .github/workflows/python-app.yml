@@ -15,7 +15,10 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@main
+      with:
+        persist-credentials: false
+        fetch-depth: 0
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
       with:
@@ -52,14 +55,8 @@ jobs:
           ledger="${files[i+1]}"
           python parse_downloads.py "$hand_histories" "$ledger" 
         done
-    - name: commit changes
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add info.pickle mydb.db
-        git commit -m 'updated data' -a
-    - name: push changes
-      uses: ad-m/github-push-action@v0.6.0
+    - name: Commit & Push changes
+      uses: actions-js/push@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: main
+  
