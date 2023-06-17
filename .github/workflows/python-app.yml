@@ -52,8 +52,14 @@ jobs:
           ledger="${files[i+1]}"
           python parse_downloads.py "$hand_histories" "$ledger" 
         done
-    - name: Push info.pickle and database
+    - name: commit changes
       run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
         git add info.pickle mydb.db
-        git commit -m 'updated data' 
-        git push 
+        git commit -m 'updated data' -a
+    - name: push changes
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: master
