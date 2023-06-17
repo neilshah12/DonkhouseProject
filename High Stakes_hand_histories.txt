@@ -1,0 +1,114 @@
+jeffz14 folded
+eddiehu won 3 chips
+
+2023-06-17 00:28:03: New hand (ID EBaI8wSsaGNtW7jG) of NL Texas Holdem
+jeffz14 (336, SB),
+eddiehu (780, BB) are in the hand.
+eddiehu posted 1
+jeffz14 posted 2
+eddiehu folded
+jeffz14 won 3 chips
+
+2023-06-17 00:28:19: New hand (ID UiLAEGdoahLaC4rG) of NL Texas Holdem
+eddiehu (779, SB),
+jeffz14 (337, BB) are in the hand.
+jeffz14 posted 1
+eddiehu posted 2
+jeffz14 raised to 5
+eddiehu called 3
+board: 3♦ 6♥ 2♠ 
+eddiehu checked
+jeffz14 checked
+board: 3♦ 6♥ 2♠ 5♦ 
+eddiehu checked
+jeffz14 checked
+board: 3♦ 6♥ 2♠ 5♦ 4♠ 
+eddiehu bet 7
+jeffz14 raised to 30
+eddiehu called 23
+jeffz14 showed J♠ 8♥ (straight)
+eddiehu showed 7♠ 2♥ (straight)
+eddiehu won the 72 bounty
+jeffz14 paid 6
+eddiehu won 76 chips
+
+2023-06-17 00:29:00: New hand (ID tv36z0ZXaK5oHqCJ) of NL Texas Holdem
+jeffz14 (296, SB),
+eddiehu (820, BB) are in the hand.
+eddiehu posted 1
+jeffz14 posted 2
+eddiehu raised to 5
+jeffz14 called 3
+board: A♠ A♦ 2♣ 
+jeffz14 checked
+eddiehu bet 3
+jeffz14 folded
+eddiehu won 13 chips
+
+2023-06-17 00:29:25: New hand (ID ho9yRjcnGoNCyi6W) of NL Texas Holdem
+eddiehu (825, SB),
+jeffz14 (291, BB) are in the hand.
+jeffz14 posted 1
+eddiehu posted 2
+jeffz14 raised to 5
+eddiehu called 3
+board: A♠ 8♠ 10♣ 
+eddiehu checked
+jeffz14 checked
+board: A♠ 8♠ 10♣ 9♠ 
+eddiehu checked
+jeffz14 checked
+board: A♠ 8♠ 10♣ 9♠ 3♥ 
+eddiehu checked
+jeffz14 bet 7
+eddiehu called 7
+jeffz14 showed 10♦ 5♦ (pair)
+eddiehu showed 4♠ A♥ (pair)
+eddiehu won 24 chips
+
+2023-06-17 00:29:57: New hand (ID 8JrzdsXcaCqbprCM) of NL Texas Holdem
+jeffz14 (279, SB),
+eddiehu (837, BB) are in the hand.
+eddiehu posted 1
+jeffz14 posted 2
+eddiehu raised to 5
+jeffz14 folded
+eddiehu won 7 chips
+
+2023-06-17 00:30:09: New hand (ID Qai9URB9R9dWBkow) of NL Texas Holdem
+eddiehu (839, SB),
+jeffz14 (277, BB) are in the hand.
+jeffz14 posted 1
+eddiehu posted 2
+jeffz14 raised to 5
+eddiehu called 3
+board: Q♥ 3♥ 5♦ 
+eddiehu checked
+jeffz14 checked
+board: Q♥ 3♥ 5♦ 6♠ 
+eddiehu bet 7
+jeffz14 folded
+eddiehu won 17 chips
+
+2023-06-17 00:30:40: New hand (ID Z5zZmLkDQQ7inCIc) of NL Texas Holdem
+jeffz14 (272, SB),
+eddiehu (844, BB) are in the hand.
+eddiehu posted 1
+jeffz14 posted 2
+eddiehu raised to 5
+jeffz14 called 3
+board: Q♣ Q♦ Q♠ 
+jeffz14 checked
+eddiehu bet 3
+jeffz14 folded
+eddiehu won 13 chips
+
+2023-06-17 00:31:27: New hand (ID mMPbs7halJZjZyE7) of NL Texas Holdem
+eddiehu (849, SB),
+jeffz14 (267, BB) are in the hand.
+jeffz14 posted 1
+eddiehu posted 2
+jeffz14 raised to 5
+eddiehu folded
+jeffz14 won 7 chips
+2023-06-17 00:31:37: The game has ended
