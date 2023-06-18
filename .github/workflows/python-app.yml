@@ -42,6 +42,8 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: transaction-logs
+    - name: Add random files
+      run: touch abc.txt xyz.csv a.txt p.csv s_ledger.csv.xls
     - name: Error check and cleanup log folder
       run: find ./logs \( -type f \! -name "*_ledger.csv" -a \! -name "*_hand_histories.txt" -o -size 0 \) -delete
     - name: Run parse.py for each log file
