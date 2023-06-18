@@ -51,6 +51,7 @@ jobs:
         files=(logs/*)
         for file in "${files[@]}"; do
           echo "$file"
+        done
     - name: Error check and cleanup log folder
       run: find ./logs \( -type f \! -name "*_ledger.csv" -a \! -name "*_hand_histories.txt" -o -size 0 \) -delete
     - name: Print files
@@ -58,6 +59,7 @@ jobs:
         files=(logs/*)
         for file in "${files[@]}"; do
           echo "$file"
+        done
     - name: Run parse.py for each log file
       run: |
         files=(logs/*)
