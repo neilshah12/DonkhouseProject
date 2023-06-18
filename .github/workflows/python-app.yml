@@ -46,6 +46,7 @@ jobs:
       run: |
         cd logs
         touch abc.txt xyz.csv a.txt p.csv s_ledger.csv.xls
+        echo "hello world" >> abc.txt
     - name: Print files
       run: |
         files=(logs/*)
