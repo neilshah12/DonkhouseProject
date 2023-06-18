@@ -67,7 +67,7 @@ def click_downloads(driver, link, stakes, table_name):
 
     latest_file = None
     time_counter = 0
-    while latest_file is None or '.part' in latest_file or len(all_files) == prev_len:
+    while latest_file is None or '.part' in latest_file or '.crdownload' in latest_file or len(all_files) == prev_len:
         time.sleep(0.5)
         all_files = glob.glob(f'{download_dir}/*')
         if len(all_files) > 0:
@@ -84,7 +84,7 @@ def click_downloads(driver, link, stakes, table_name):
     time.sleep(0.5)
     time_counter = 0
     prev_latest_file = latest_file
-    while latest_file == prev_latest_file or '.part' in latest_file or len(all_files) == prev_len:
+    while latest_file == prev_latest_file or '.part' in latest_file or '.crdownload' in latest_file or len(all_files) == prev_len:
         time.sleep(0.5)
         all_files = glob.glob(download_dir + '/*')
         if len(all_files) > 0:
