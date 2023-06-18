@@ -1,6 +1,3 @@
-from fractions import Fraction
-
-
 class Player:
     def __init__(self, username, net=0):
         self.username = username
