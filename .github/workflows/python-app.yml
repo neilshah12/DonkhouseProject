@@ -42,30 +42,36 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: transaction-logs
-    - name: Add random files
-      run: touch abc.txt xyz.csv a.txt p.csv s_ledger.csv.xls
+    - name: Print files before cleanup
+      run: |
+        files=(logs/*)
+        for file in "${files[@]}"; do
+          echo "$file"
+        done
     - name: Error check and cleanup log folder
       run: find ./logs \( -type f \! -name "*_ledger.csv" -a \! -name "*_hand_histories.txt" -o -size 0 \) -delete
+    - name: Print files after cleanup
+      run: |
+        files=(logs/*)
+        for file in "${files[@]}"; do
+          echo "$file"
+        done
     - name: Run parse.py for each log file
       run: |
         files=(logs/*)
-        echo $files
         for ((i=0; i<${#files[@]}; i+=2)); do
           hand_histories="${files[i]}"
           ledger="${files[i+1]}"
           python parse_downloads.py "$hand_histories" "$ledger" 
         done
-    - name: commit files
+    - name: Commit files
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add info.pickle mydb.db
         git commit -m "update data" -a     
-    - name: push changes
+    - name: Push changes
       uses: ad-m/github-push-action@v0.6.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: main
-  
-    
-  
