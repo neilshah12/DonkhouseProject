@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
-name: Python application
+name: Donkhouse
 
 on:
   workflow_dispatch:
@@ -42,8 +42,20 @@ jobs:
       uses: actions/download-artifact@v2
       with:
         name: transaction-logs
+    - name: Print files before cleanup
+      run: |
+        files=(logs/*)
+        for file in "${files[@]}"; do
+          echo "$file"
+        done
     - name: Error check and cleanup log folder
       run: find ./logs \( -type f \! -name "*_ledger.csv" -a \! -name "*_hand_histories.txt" -o -size 0 \) -delete
+    - name: Print files after cleanup
+      run: |
+        files=(logs/*)
+        for file in "${files[@]}"; do
+          echo "$file"
+        done
     - name: Run parse.py for each log file
       run: |
         files=(logs/*)
@@ -52,12 +64,14 @@ jobs:
           ledger="${files[i+1]}"
           python parse_downloads.py "$hand_histories" "$ledger" 
         done
-    - name: Commit & Push changes
+    - name: Commit files
       run: |
-        git config --local user.email "actions@github.com"
-        git config --local user.name "GitHub Actions"
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
         git add info.pickle mydb.db
-        git commit -m "Update data"
-        git push
-    
-  
+        git commit -m "update data" -a     
+    - name: Push changes
+      uses: ad-m/github-push-action@v0.6.0
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: main

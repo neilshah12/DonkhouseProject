@@ -1,6 +1,3 @@
-from fractions import Fraction
-
-
 class Player:
     def __init__(self, username, net=0):
         self.username = username
@@ -16,7 +13,6 @@ class Player:
         self.lim = (0, 0)
         self.raised = False
 
-
     def __eq__(self, other):
         if isinstance(other, Player):
             return self.username == other.username
@@ -26,17 +22,19 @@ class Player:
         return hash(self.username)
 
     def __str__(self):
-        return f"Player: {self.username}, " \
-               f"Net: {self.net}, " \
-               f"VPIP: {self.vpip}, " \
-               f"UOPFR: {self.uopfr}, " \
-               f"PFR: {self.pfr}, " \
-               f"3-Bet: {self.tb}, " \
-               f"4-Bet: {self.fb}, " \
-               f"F3B: {self.f3b}, " \
-               f"C-Bet: {self.cbet}, " \
-               f"Donk Bet: {self.donk}, " \
-               f"LIM: {self.lim}"
+        return (
+            f"Player: {self.username}, "
+            f"Net: {self.net}, "
+            f"VPIP: {self.vpip}, "
+            f"UOPFR: {self.uopfr}, "
+            f"PFR: {self.pfr}, "
+            f"3-Bet: {self.tb}, "
+            f"4-Bet: {self.fb}, "
+            f"F3B: {self.f3b}, "
+            f"C-Bet: {self.cbet}, "
+            f"Donk Bet: {self.donk}, "
+            f"LIM: {self.lim}"
+        )
 
     def update(self, other):
         if not isinstance(other, Player) or self.username != other.username:
@@ -52,13 +50,12 @@ class Player:
         self.donk = tuple(map(lambda i, j: i + j, self.donk, other.donk))
         self.lim = tuple(map(lambda i, j: i + j, self.lim, other.lim))
 
+
 class Game:
     def __init__(self, date, name):
         self.date = date
         self.name = name
         self.players = []
-    
+
     def __str__(self):
         return f"Game: {self.name}, Date: {self.date}, Players: {self.players}"
-    
-    
