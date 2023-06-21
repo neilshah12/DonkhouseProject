@@ -21,7 +21,7 @@ association_table = Table(
 )
 
 
-class PlayerTable(Base):
+class Player_Table(Base):
     __tablename__ = "players"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     username = Column("username", String)
@@ -104,7 +104,7 @@ class PlayerTable(Base):
         )
 
 
-class GameTable(Base):
+class Game_Table(Base):
     __tablename__ = "games"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     date = Column("date", Date)
