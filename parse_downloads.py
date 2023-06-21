@@ -12,6 +12,7 @@ import sys
 
 all_players: Dict[str, Player] = {}
 all_games = []
+
 server = 'MYSQL5048.site4now.net'
 database = 'db_a53d6c_donktrk'
 uid = 'a53d6c_donktrk'
