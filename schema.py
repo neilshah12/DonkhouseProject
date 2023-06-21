@@ -24,7 +24,7 @@ association_table = Table(
 class Player_Table(Base):
     __tablename__ = "players"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
-    username = Column("username", String)
+    username = Column("username", String(50))
     net = Column("net", Float)
     VPIP_num = Column("VPIP_num", Integer)
     VPIP_denom = Column("VPIP_denom", Integer)
@@ -108,7 +108,7 @@ class Game_Table(Base):
     __tablename__ = "games"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     date = Column("date", Date)
-    name = Column("name", String)
+    name = Column("name", String(50))
     players = relationship(
         "Player_Table", secondary=association_table, back_populates="games"
     )
@@ -120,7 +120,18 @@ class Game_Table(Base):
     def __repr__(self):
         return f"Game(id={self.id}, date={self.date}, name='{self.name}')"
 
+server = 'MYSQL5048.site4now.net'
+database = 'db_a53d6c_donktrk'
+uid = 'a53d6c_donktrk'
+password = 'donkhouse72'
+driver = '{MySQL ODBC 8.0 UNICODE Driver}'
+# Create the connection URL for SQLAlchemy
+connection_string = f"mysql://{uid}:{password}@{server}/{database}"
+engine = create_engine(connection_string, echo=True)
 
-engine = create_engine("sqlite:///mydb.db", echo=True)
+# # Drop existing tables
+# Base.metadata.drop_all(bind=engine)
+
+# Create new empty tables
 Base.metadata.create_all(bind=engine)
 engine.dispose()
