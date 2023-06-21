@@ -64,8 +64,6 @@ jobs:
           ledger="${files[i+1]}"
           python parse_downloads.py "$hand_histories" "$ledger" 
         done
-      env:
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }} 
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"
