@@ -31,8 +31,6 @@ jobs:
     - uses: browser-actions/setup-chrome@latest
     - name: Clear logs directory
       run: rm -rf logs
-    - name: Set up environment variables
-      run: echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> $GITHUB_ENV
     - name: Run script
       run: python download_files.py
     - name: Upload artifact
@@ -66,8 +64,6 @@ jobs:
           ledger="${files[i+1]}"
           python parse_downloads.py "$hand_histories" "$ledger" 
         done
-      env:
-        DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
     - name: Commit files
       run: |
         git config --local user.email "action@github.com"
