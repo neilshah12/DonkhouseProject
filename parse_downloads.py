@@ -12,9 +12,7 @@ import sys
 
 all_players: Dict[str, Player] = {}
 all_games = []
-# engine = create_engine('sqlite:///mydb.db')
-# Session = sessionmaker(bind=engine)
-# session = Session()
+
 server = 'MYSQL5048.site4now.net'
 database = 'db_a53d6c_donktrk'
 uid = 'a53d6c_donktrk'
