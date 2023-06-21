@@ -30,7 +30,9 @@ jobs:
       run: pip install -r requirements.txt
     - uses: browser-actions/setup-chrome@latest
     - name: Clear logs directory
-      run: rm -rf logs/*
+      run: rm -rf logs
+    - name: Set up environment variables
+      run: echo "DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }}" >> $GITHUB_ENV
     - name: Run script
       run: python download_files.py
     - name: Upload artifact
