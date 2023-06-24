@@ -211,29 +211,6 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
 
             first_bet_on_flop_player = None
 
-            if num_players_in_hand < 3:
-                if f"{table} hands reached flop with 3+ players" in curr_info:
-                    percent = curr_info[f"{table} hands reached flop with 3+ players"]
-                    num = percent[0] + 0
-                    denom = percent[1] + 1
-                    curr_info[f"{table} hands reached flop with 3+ players"] = (
-                        num,
-                        denom,
-                    )
-                else:
-                    curr_info[f"{table} hands reached flop with 3+ players"] = (0, 1)
-            else:
-                if f"{table} hands reached flop with 3+ players" in curr_info:
-                    percent = curr_info[f"{table} hands reached flop with 3+ players"]
-                    num = percent[0] + 1
-                    denom = percent[1] + 1
-                    curr_info[f"{table} hands reached flop with 3+ players"] = (
-                        num,
-                        denom,
-                    )
-                else:
-                    curr_info[f"{table} hands reached flop with 3+ players"] = (1, 1)
-
             while line and not re.match(patterns["turn"], line):
                 if re.match(patterns["won"], line):
                     break
@@ -344,7 +321,6 @@ def main():
     update_pickle_info(curr_info)
     session.close()
     engine.dispose()
-    info = load_info()
 
 
 if __name__ == "__main__":
