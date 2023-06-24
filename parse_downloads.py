@@ -69,12 +69,12 @@ def parse_nets(ledger, info):  # ledger
             game_players.clear()
         elif user == "End time:" and math.isnan(net):
             game_end_time = dt.strptime(row["In"], "%Y-%m-%d %H:%M:%S")
+            if game_end_time <= latest_parsed_time:
+                break
             new_game = Game(game_end_time.date(), table)
             for player in game_players:
                 new_game.players.append(player)
             all_games.append(new_game)
-            if game_end_time <= latest_parsed_time:
-                return
             new_latest_time = max(new_latest_time, game_end_time)
             update_players(all_players, game_players)
         elif not math.isnan(net):
