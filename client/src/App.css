@@ -1,0 +1,81 @@
+/* App.css */
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #c3e2f7; /* Light blue background */
+  color: #000; /* Black text color */
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+}
+
+.title {
+  font-size: 36px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.leaderboard-toggler {
+  margin-bottom: 20px;
+}
+
+.leaderboard-toggler button {
+  padding: 10px 20px;
+  margin: 0 8px;
+  font-size: 18px;
+  background-color: #fff; /* White button background */
+  color: #387197; /* Light blue button text color */
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.leaderboard-toggler button:hover {
+  background-color: #387197; /* Light blue button background on hover */
+  color: #fff; /* White button text color on hover */
+}
+
+.leaderboard-toggler button.active {
+  background-color: #fff; /* White background for active button */
+  color: #387197; /* Light blue text color for active button */
+}
+
+.leaderboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 700px;
+  margin-top: 20px;
+}
+
+.leaderboard h1 {
+  font-size: 24px;
+  margin-bottom: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.leaderboard h4:nth-child(even) {
+  background-color: #e1effc; /* Light blue background for even entries */
+  padding: 10px;
+  margin: 5px;
+  width: calc(100% - 20px);
+  border-radius: 8px;
+}
+
+.leaderboard h4:nth-child(even):last-child {
+  margin-bottom: 0;
+}
+
+.leaderboard h4:last-child {
+  margin-bottom: 20px;
+}
