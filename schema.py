@@ -43,14 +43,14 @@ class PlayerTable(Base):
     __tablename__ = "players"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     username = Column('username', Text)
-    player = Column("player", PlayerType)
+    stats = Column("stats", PlayerType)
     games = relationship(
         "Game_Table", secondary=association_table, back_populates="players"
     )
 
     def __init__(self, player : Player):
         self.username = player.username
-        self.player = player
+        self.stats = player
 
 
 class GameType(TypeDecorator):
