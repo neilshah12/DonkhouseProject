@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 class Player:
     def __init__(self, username, net=0):
         self.username = username
@@ -12,6 +14,16 @@ class Player:
         self.donk = (0, 0)
         self.lim = (0, 0)
         self.raised = False
+    
+    @classmethod
+    def fromdict(cls, dict):
+        if dict is None:
+            return None
+        player = cls(dict['username'])
+        for k, v in dict.items():
+            setattr(player, k, v)
+        return player
+
 
     def __eq__(self, other):
         if isinstance(other, Player):
@@ -39,6 +51,7 @@ class Player:
     def update(self, other):
         if not isinstance(other, Player) or self.username != other.username:
             return
+        
         self.net += other.net
         self.vpip = tuple(map(lambda i, j: i + j, self.vpip, other.vpip))
         self.pfr = tuple(map(lambda i, j: i + j, self.pfr, other.pfr))
@@ -49,13 +62,3 @@ class Player:
         self.cbet = tuple(map(lambda i, j: i + j, self.cbet, other.cbet))
         self.donk = tuple(map(lambda i, j: i + j, self.donk, other.donk))
         self.lim = tuple(map(lambda i, j: i + j, self.lim, other.lim))
-
-
-class Game:
-    def __init__(self, date, name):
-        self.date = date
-        self.name = name
-        self.players = []
-
-    def __str__(self):
-        return f"Game: {self.name}, Date: {self.date}, Players: {self.players}"
