@@ -68,13 +68,12 @@ class GameType(TypeDecorator):
         return None
 
 
-class GameTable(Base):
+class Game_Table(Base):
     __tablename__ = "games"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     name = Column("name", Text)
     date = Column("date", Date)
     game = Column("game", GameType)
-
     players = relationship(
         "PlayerTable", secondary=association_table, back_populates="games"
     )
@@ -87,6 +86,7 @@ class GameTable(Base):
 
     def __repr__(self):
         return f"Game(id={self.id}, date={self.date}, name='{self.name}')"
+
 
 # server = 'MYSQL5048.site4now.net'
 # database = 'db_a53d6c_donktrk'

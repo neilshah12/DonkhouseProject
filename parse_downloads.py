@@ -18,7 +18,6 @@ all_games: List[Game] = []
 server = 'MYSQL5048.site4now.net'
 database = 'db_a53d6c_donktrk'
 uid = 'a53d6c_donktrk'
-#password = os.environ.get('DATABASE_PASSWORD')
 password = 'donkhouse72'
 driver = 'mysql+mysqlconnector'
 connection_string = f"{driver}://{uid}:{password}@{server}/{database}"
