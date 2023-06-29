@@ -246,40 +246,42 @@ def main():
 
     for _, player in all_players.items():
         existing_row = (
-            session.query(Player_Table).filter_by(username=player.username).first()
+            session.query(PlayerTable).filter_by(username=player.username).first()
         )
+        
+        
 
         if existing_row:
             stmt = (
-                update(Player_Table)
-                .where(Player_Table.username == player.username)
+                update(PlayerTable)
+                .where(PlayerTable.username == player.username)
                 .values(
-                    net=Player_Table.net + player.net,
-                    VPIP_num=Player_Table.VPIP_num + player.vpip[0],
-                    VPIP_denom=Player_Table.VPIP_denom + player.vpip[1],
-                    UOPFR_num=Player_Table.UOPFR_num + player.uopfr[0],
-                    UOPFR_denom=Player_Table.UOPFR_denom + player.uopfr[1],
-                    PFR_num=Player_Table.PFR_num + player.pfr[0],
-                    PFR_denom=Player_Table.PFR_denom + player.pfr[1],
-                    threebet_num=Player_Table.threebet_num + player.tb[0],
-                    threebet_denom=Player_Table.threebet_denom + player.tb[1],
-                    fourbet_num=Player_Table.fourbet_num + player.fb[0],
-                    fourbet_denom=Player_Table.fourbet_denom + player.fb[1],
-                    fold_to_three_num=Player_Table.fold_to_three_num + player.f3b[0],
-                    fold_to_three_denom=Player_Table.fold_to_three_denom
+                    net=PlayerTable.net + player.net,
+                    VPIP_num=PlayerTable.VPIP_num + player.vpip[0],
+                    VPIP_denom=PlayerTable.VPIP_denom + player.vpip[1],
+                    UOPFR_num=PlayerTable.UOPFR_num + player.uopfr[0],
+                    UOPFR_denom=PlayerTable.UOPFR_denom + player.uopfr[1],
+                    PFR_num=PlayerTable.PFR_num + player.pfr[0],
+                    PFR_denom=PlayerTable.PFR_denom + player.pfr[1],
+                    threebet_num=PlayerTable.threebet_num + player.tb[0],
+                    threebet_denom=PlayerTable.threebet_denom + player.tb[1],
+                    fourbet_num=PlayerTable.fourbet_num + player.fb[0],
+                    fourbet_denom=PlayerTable.fourbet_denom + player.fb[1],
+                    fold_to_three_num=PlayerTable.fold_to_three_num + player.f3b[0],
+                    fold_to_three_denom=PlayerTable.fold_to_three_denom
                                         + player.f3b[1],
-                    c_bet_num=Player_Table.c_bet_num + player.cbet[0],
-                    c_bet_denom=Player_Table.c_bet_denom + player.cbet[1],
-                    donk_num=Player_Table.donk_num + player.donk[0],
-                    donk_denom=Player_Table.donk_denom + player.donk[1],
-                    limp_num=Player_Table.limp_num + player.lim[0],
-                    limp_denom=Player_Table.limp_denom + player.lim[1],
+                    c_bet_num=PlayerTable.c_bet_num + player.cbet[0],
+                    c_bet_denom=PlayerTable.c_bet_denom + player.cbet[1],
+                    donk_num=PlayerTable.donk_num + player.donk[0],
+                    donk_denom=PlayerTable.donk_denom + player.donk[1],
+                    limp_num=PlayerTable.limp_num + player.lim[0],
+                    limp_denom=PlayerTable.limp_denom + player.lim[1],
                 )
             )
             session.execute(stmt)
             session.commit()
         else:
-            new_row = Player_Table(
+            new_row = PlayerTable(
                 username=player.username,
                 net=player.net,
                 vpip_num=player.vpip[0],
@@ -305,11 +307,11 @@ def main():
             session.commit()
 
     for game in all_games:
-        game_entry = Game_Table(game)
+        game_entry = GameTable(game)
         for player in game.players:
             player_entry = (
-                session.query(Player_Table)
-                .filter(Player_Table.username == player)
+                session.query(PlayerTable)
+                .filter(PlayerTable.username == player)
                 .first()
             )
 
