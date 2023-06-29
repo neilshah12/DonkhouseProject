@@ -263,7 +263,7 @@ def main():
 
     for game in all_games:
         game_entry = GameTable(game)
-        for player in game.players:
+        for player in game.player_nets:
             player_entry = (
                 session.query(PlayerTable)
                 .filter(PlayerTable.username == player)
