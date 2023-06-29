@@ -45,7 +45,7 @@ class PlayerTable(Base):
     username = Column('username', Text)
     stats = Column("stats", PlayerType)
     games = relationship(
-        "Game_Table", secondary=association_table, back_populates="players"
+        "GameTable", secondary=association_table, back_populates="players"
     )
 
     def __init__(self, player : Player):
@@ -76,7 +76,7 @@ class GameTable(Base):
     game = Column("game", GameType)
 
     players = relationship(
-        "Player_Table", secondary=association_table, back_populates="games"
+        "PlayerTable", secondary=association_table, back_populates="games"
     )
 
     def __init__(self, game: Game):
