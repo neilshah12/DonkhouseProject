@@ -1,17 +1,9 @@
 import React, { useState, useEffect } from "react";
-import Axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { Link, useLoaderData } from "react-router-dom";
 
-const Leaderboard = () => {
-    const [playerList, setPlayerList] = useState([]);
+export default function Leaderboard() {
+    const players = useLoaderData()
     const [leaderboardOption, setLeaderboardOption] = useState("biggest winners");
-    const history = useHistory();
-
-    useEffect(() => {
-        Axios.get('http://localhost:3001/api/get').then((response) => {
-        setPlayerList(response.data);
-        });
-    }, []);
 
     const handleLeaderboardToggle = (option) => {
         setLeaderboardOption(option);
@@ -19,17 +11,12 @@ const Leaderboard = () => {
 
     const filteredPlayerList = () => {
         if (leaderboardOption === "biggest winners") {
-        return playerList.filter((player) => player.net > 0).sort((a, b) => b.net - a.net);
+        return players.filter((player) => player.net > 0).sort((a, b) => b.net - a.net);
         } else if (leaderboardOption === "biggest losers") {
-        return playerList.filter((player) => player.net < 0).sort((a, b) => a.net - b.net);
+        return players.filter((player) => player.net < 0).sort((a, b) => a.net - b.net);
         } else {
-        return playerList;
+        return players;
         }
-    };
-
-    const handlePlayerClick = (username) => {
-        // Redirect the user to a new page with player statistics
-        history.push(`/player/${username}`);
     };
     
     return (
@@ -48,16 +35,17 @@ const Leaderboard = () => {
                     Biggest Losers
                 </button>
             </div>
-            
-            <div className="leaderboard">
-                {filteredPlayerList().map((val) => (
-                    <h4 key={val.username} onClick={() => handlePlayerClick(val.username)}>
-                    Username: {val.username} | Net: {val.net} 
-                    </h4>
-                ))}
-            </div>
+            {filteredPlayerList().map(player => (
+                <Link to={player.username.toString()} key={player.id}>
+                    <p>{player.username} | {player.net}</p>
+                </Link>
+            ))}
       </div>
     );
 }
- 
-export default Leaderboard;
+
+export const playerLoader = async () => {
+    const res = await fetch('http://localhost:3001/api/get')
+
+    return res.json()
+}

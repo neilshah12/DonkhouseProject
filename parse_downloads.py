@@ -1,7 +1,8 @@
 from datetime import datetime as dt
-from typing import Dict
-from player import Player, Game
-from schema import Player_Table, Game_Table
+from typing import Dict, List
+from player import Player
+from game import Game
+from schema import PlayerTable, GameTable
 from sqlalchemy import create_engine, update
 from sqlalchemy.orm import sessionmaker
 import math
@@ -9,15 +10,14 @@ import pandas as pd
 import pickle
 import re
 import sys
-import os
+import json
 
 all_players: Dict[str, Player] = {}
-all_games = []
+all_games: List[Game] = []
 
 server = 'MYSQL5048.site4now.net'
 database = 'db_a53d6c_donktrk'
 uid = 'a53d6c_donktrk'
-#password = os.environ.get('DATABASE_PASSWORD')
 password = 'donkhouse72'
 driver = 'mysql+mysqlconnector'
 connection_string = f"{driver}://{uid}:{password}@{server}/{database}"
@@ -61,24 +61,23 @@ def parse_nets(ledger, info):  # ledger
         latest_parsed_time = info[f"{table} latest parsed time"] = dt.min
 
     new_latest_time = latest_parsed_time
-    game_players: Dict[str, Player] = {}
+
+    curr_game = Game(table)
     for _, row in df.iterrows():
         user = row["User"]
         net = row["Net"]
         if not isinstance(user, str):
-            game_players.clear()
+            curr_game = Game(table)
         elif user == "End time:" and math.isnan(net):
             game_end_time = dt.strptime(row["In"], "%Y-%m-%d %H:%M:%S")
             if game_end_time <= latest_parsed_time:
                 break
-            new_game = Game(game_end_time.date(), table)
-            for player in game_players:
-                new_game.players.append(player)
-            all_games.append(new_game)
+            curr_game.end_time = game_end_time.date()
+            all_games.append(curr_game)
             new_latest_time = max(new_latest_time, game_end_time)
-            update_players(all_players, game_players)
+            update_players(all_players, curr_game.players)
         elif not math.isnan(net):
-            game_players[user] = Player(user, net=net)
+            curr_game.add_player(Player(user, net=net))
     if new_latest_time > latest_parsed_time:
         info[f"{table} latest parsed time"] = new_latest_time
 
@@ -244,78 +243,34 @@ def main():
     parse_nets(sys.argv[2], curr_info)
     parse_stats(sys.argv[1], prev_info, curr_info)
 
-    for play in all_players:
-        player = all_players[play]
+    for _, player in all_players.items():
         existing_row = (
-            session.query(Player_Table).filter_by(username=player.username).first()
+            session.query(PlayerTable).filter_by(username=player.username).first()
         )
 
         if existing_row:
-            stmt = (
-                update(Player_Table)
-                .where(Player_Table.username == player.username)
-                .values(
-                    net=Player_Table.net + player.net,
-                    VPIP_num=Player_Table.VPIP_num + player.vpip[0],
-                    VPIP_denom=Player_Table.VPIP_denom + player.vpip[1],
-                    UOPFR_num=Player_Table.UOPFR_num + player.uopfr[0],
-                    UOPFR_denom=Player_Table.UOPFR_denom + player.uopfr[1],
-                    PFR_num=Player_Table.PFR_num + player.pfr[0],
-                    PFR_denom=Player_Table.PFR_denom + player.pfr[1],
-                    threebet_num=Player_Table.threebet_num + player.tb[0],
-                    threebet_denom=Player_Table.threebet_denom + player.tb[1],
-                    fourbet_num=Player_Table.fourbet_num + player.fb[0],
-                    fourbet_denom=Player_Table.fourbet_denom + player.fb[1],
-                    fold_to_three_num=Player_Table.fold_to_three_num + player.f3b[0],
-                    fold_to_three_denom=Player_Table.fold_to_three_denom
-                                        + player.f3b[1],
-                    c_bet_num=Player_Table.c_bet_num + player.cbet[0],
-                    c_bet_denom=Player_Table.c_bet_denom + player.cbet[1],
-                    donk_num=Player_Table.donk_num + player.donk[0],
-                    donk_denom=Player_Table.donk_denom + player.donk[1],
-                    limp_num=Player_Table.limp_num + player.lim[0],
-                    limp_denom=Player_Table.limp_denom + player.lim[1],
-                )
-            )
-            session.execute(stmt)
+            db_player = existing_row.stats
+            db_player.update(player)
             session.commit()
         else:
-            new_row = Player_Table(
+            new_row = PlayerTable(
                 username=player.username,
-                net=player.net,
-                vpip_num=player.vpip[0],
-                vpip_denom=player.vpip[1],
-                uopfr_num=player.uopfr[0],
-                uopfr_denom=player.uopfr[1],
-                pfr_num=player.pfr[0],
-                pfr_denom=player.pfr[1],
-                threebet_num=player.tb[0],
-                threebet_denom=player.tb[1],
-                fourbet_num=player.fb[0],
-                fourbet_denom=player.fb[1],
-                fold_to_three_num=player.f3b[0],
-                fold_to_three_denom=player.f3b[1],
-                c_bet_num=player.cbet[0],
-                c_bet_denom=player.cbet[1],
-                donk_num=player.donk[0],
-                donk_denom=player.donk[1],
-                limp_num=player.lim[0],
-                limp_denom=player.lim[1],
+                stats=player
             )
             session.add(new_row)
             session.commit()
 
     for game in all_games:
-        desired_game = Game_Table(date=game.date, name=game.name)
-        for player in game.players:
-            desired_player = (
-                session.query(Player_Table)
-                .filter(Player_Table.username == player)
+        game_entry = GameTable(game)
+        for player in game.player_nets:
+            player_entry = (
+                session.query(PlayerTable)
+                .filter(PlayerTable.username == player)
                 .first()
             )
 
-            if desired_player:
-                desired_player.games.append(desired_game)
+            if player_entry:
+                player_entry.games.append(game_entry)
                 session.commit()
 
     update_pickle_info(curr_info)

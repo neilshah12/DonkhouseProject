@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from "react";
-import Leaderboard from "./Leaderboard";
+import {createBrowserRouter, Route, createRoutesFromElements, RouterProvider} from 'react-router-dom';
+import Leaderboard, { playerLoader } from "./Leaderboard";
 import './App.css';
+import RootLayout from "./RootLayout";
+import PlayerInfo, { playerInfoLoader } from "./PlayerInfo";
+import GameInfo from "./GameInfo";
 
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<RootLayout />}>
+        <Route index element={<Leaderboard />} loader={playerLoader} />
+        <Route path=":username" element={<PlayerInfo />} loader={playerInfoLoader}/>
+        <Route path="game/:id" element={<GameInfo />}/>
+    </Route>
+  )
+)
 function App() {
 
   return (
     <div className="App">
-      <h1 className="title">DonkHouse Live Tracker</h1>
-      <Leaderboard />
+      <RouterProvider router={router} />
     </div>
   );
 }
