@@ -98,7 +98,7 @@ connection_string = f"mysql://{uid}:{password}@{server}/{database}"
 engine = create_engine(connection_string, echo=True)
 
 # Drop existing tables
-Base.metadata.drop_all(bind=engine)
+# Base.metadata.drop_all(bind=engine)
 
 # Create new empty tables
 #Base.metadata.create_all(bind=engine)
