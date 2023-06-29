@@ -255,10 +255,7 @@ def main():
             db_player.update(player)
             session.commit()
         else:
-            new_row = PlayerTable(
-                username=player.username,
-                stats=player
-            )
+            new_row = PlayerTable(player)
             session.add(new_row)
             session.commit()
 
