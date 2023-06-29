@@ -73,7 +73,7 @@ class GameTable(Base):
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     name = Column("name", Text)
     date = Column("date", Date)
-    game = Column("game", GameType)
+    player_nets = Column("playerNets", GameType)
     players = relationship(
         "PlayerTable", secondary=association_table, back_populates="games"
     )
@@ -81,7 +81,7 @@ class GameTable(Base):
     def __init__(self, game: Game):
         self.name = game.name
         self.date = game.date
-        self.game = game
+        self.player_nets = game
         
 
     def __repr__(self):
