@@ -280,7 +280,8 @@ def main():
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as exc:
-        print(exc)
+    # try:
+    #     main()
+    # except Exception as exc:
+    #     print(exc)
+    main()
