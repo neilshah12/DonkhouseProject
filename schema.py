@@ -68,7 +68,7 @@ class GameType(TypeDecorator):
         return None
 
 
-class Game_Table(Base):
+class GameTable(Base):
     __tablename__ = "games"
     id = Column("id", Integer, primary_key=True, autoincrement=True)
     name = Column("name", Text)
