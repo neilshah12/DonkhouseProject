@@ -3,6 +3,8 @@ import { Link, useLoaderData, useParams } from "react-router-dom";
 export default function PlayerInfo() {
     const { username } = useParams()
     const games = useLoaderData()
+    console.log(games)
+
     return (
         <div className="playerinfo">
             {games.map(game => (
