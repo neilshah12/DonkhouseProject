@@ -31,7 +31,11 @@ class PlayerType(TypeDecorator):
 
     def process_bind_param(self, value, dialect):
         if value is not None:
-            return json.dumps(value.todict())
+            player_data = {
+                'username': value.username,
+                'stats': value.stats,
+            }
+            return json.dumps(player_data)
         return None
 
     def process_result_value(self, value, dialect):
@@ -102,7 +106,7 @@ class GameTable(Base):
 # engine = create_engine(connection_string, echo=True)
 
 #Drop existing tables
-# Base.metadata.drop_all(bind=engine)
+#Base.metadata.drop_all(bind=engine)
 
 # Create new empty tables
 # Base.metadata.create_all(bind=engine)
