@@ -33,7 +33,16 @@ class PlayerType(TypeDecorator):
         if value is not None:
             player_data = {
                 'username': value.username,
-                'stats': value.stats,
+                'net': value.net,
+                'vpip': value.vpip,
+                'uopfr': value.uopfr,
+                'pfr': value.pfr,
+                'tb': value.tb,
+                'fb': value.fb,
+                'f3b': value.f3b,
+                'cbet': value.cbet,
+                'donk': value.donk,
+                'lim': value.lim
             }
             return json.dumps(player_data)
         return None
@@ -105,9 +114,9 @@ class GameTable(Base):
 # connection_string = f"mysql://{uid}:{password}@{server}/{database}"
 # engine = create_engine(connection_string, echo=True)
 
-#Drop existing tables
-#Base.metadata.drop_all(bind=engine)
+# #Drop existing tables
+# #Base.metadata.drop_all(bind=engine)
 
-# Create new empty tables
+# # Create new empty tables
 # Base.metadata.create_all(bind=engine)
 # engine.dispose()
