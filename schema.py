@@ -31,20 +31,7 @@ class PlayerType(TypeDecorator):
 
     def process_bind_param(self, value, dialect):
         if value is not None:
-            player_data = {
-                'username': value.username,
-                'net': value.net,
-                'vpip': value.vpip,
-                'uopfr': value.uopfr,
-                'pfr': value.pfr,
-                'tb': value.tb,
-                'fb': value.fb,
-                'f3b': value.f3b,
-                'cbet': value.cbet,
-                'donk': value.donk,
-                'lim': value.lim
-            }
-            return json.dumps(player_data)
+            return json.dumps(value.__dict__)
         return None
 
     def process_result_value(self, value, dialect):
@@ -72,15 +59,12 @@ class GameType(TypeDecorator):
 
     def process_bind_param(self, value, dialect):
         if value is not None:
-            game_data = value.__dict__.copy()
-            game_data['date'] = game_data['date'].isoformat()  # Convert date to string
-            return json.dumps(game_data)
+            return json.dumps(value.to_dict())
         return None
 
     def process_result_value(self, value, dialect):
         if value is not None:
             game_data = json.loads(value)
-            game_data['date'] = datetime.fromisoformat(game_data['date']).date()  # Convert string to date
             return Game.fromdict(game_data)
         return None
 
@@ -105,17 +89,17 @@ class GameTable(Base):
         return f"Game(id={self.id}, date={self.date}, name='{self.name}')"
 
 
-# server = 'MYSQL5048.site4now.net'
-# database = 'db_a53d6c_donktrk'
-# uid = 'a53d6c_donktrk'
-# password = 'donkhouse72'
-# driver = '{MySQL ODBC 8.0 UNICODE Driver}'
-# #Create the connection URL for SQLAlchemy
-# connection_string = f"mysql://{uid}:{password}@{server}/{database}"
-# engine = create_engine(connection_string, echo=True)
+server = 'MYSQL5048.site4now.net'
+database = 'db_a53d6c_donktrk'
+uid = 'a53d6c_donktrk'
+password = 'donkhouse72'
+driver = '{MySQL ODBC 8.0 UNICODE Driver}'
+#Create the connection URL for SQLAlchemy
+connection_string = f"mysql://{uid}:{password}@{server}/{database}"
+engine = create_engine(connection_string, echo=True)
 
 # #Drop existing tables
-# #Base.metadata.drop_all(bind=engine)
+#Base.metadata.drop_all(bind=engine)
 
 # # Create new empty tables
 # Base.metadata.create_all(bind=engine)
