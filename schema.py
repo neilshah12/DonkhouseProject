@@ -31,7 +31,7 @@ class PlayerType(TypeDecorator):
 
     def process_bind_param(self, value, dialect):
         if value is not None:
-            return json.dumps(value.to_dict())
+            return json.dumps(value.todict())
         return None
 
     def process_result_value(self, value, dialect):
