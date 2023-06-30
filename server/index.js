@@ -34,7 +34,7 @@ app.get('/api/get/:username', (req, res) => {
     const username = req.params.username;
     // Perform the query using pool.query
     const query = `
-      SELECT games.id, games.date, games.name
+      SELECT games.id, games.date, games.name, players.stats
       FROM games
       JOIN association ON games.id = association.game_id
       JOIN players ON association.player_id = players.id
@@ -49,6 +49,7 @@ app.get('/api/get/:username', (req, res) => {
       }
     
       // Send the query results as the response
+      console.log(results)
       res.json(results);
     });
 });

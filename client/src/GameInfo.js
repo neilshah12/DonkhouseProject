@@ -9,13 +9,26 @@ export default function GameInfo() {
     console.log(sortedEntries)
     return (
         <div className="playerinfo">
-            {sortedEntries.map(([username, net]) => (
-                <Link to={`/${username}`} key={username}>
-                    <p>{username} | {net}</p>
-                </Link>
-            ))}
+          <table className="leaderboard-table">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Net</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedEntries.map(([username, net]) => (
+                <tr key={username}>
+                  <td>
+                    <Link to={`/${username}`}>{username}</Link>
+                  </td>
+                  <td>{net}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
-    )
+      );
 }
 
 export const gameInfoLoader = async ({ params }) => {

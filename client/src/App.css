@@ -47,35 +47,31 @@ body {
   color: #387197; /* Light blue text color for active button */
 }
 
-.leaderboard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-wrap: wrap;
-  max-width: 700px;
-  margin-top: 20px;
+.leaderboard-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.leaderboard h1 {
-  font-size: 24px;
-  margin-bottom: 10px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
 }
 
-.leaderboard h4:nth-child(even) {
-  background-color: #e1effc; /* Light blue background for even entries */
-  padding: 10px;
-  margin: 5px;
-  width: calc(100% - 20px);
-  border-radius: 8px;
+.leaderboard-table th {
+  background-color: #f2f2f2;
 }
 
-.leaderboard h4:nth-child(even):last-child {
-  margin-bottom: 0;
+.leaderboard-table a {
+  text-decoration: none;
+  color: #333;
 }
 
-.leaderboard h4:last-child {
-  margin-bottom: 20px;
+.leaderboard-table a:hover {
+  text-decoration: underline;
+}
+
+.leaderboard-table tbody tr:hover {
+  background-color: #f2f2f2;
 }
