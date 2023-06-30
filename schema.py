@@ -15,6 +15,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 from game import Game
 from player import Player
+import datetime
 
 Base = declarative_base()
 
@@ -58,12 +59,15 @@ class GameType(TypeDecorator):
 
     def process_bind_param(self, value, dialect):
         if value is not None:
-            return json.dumps(value.__dict__)
+            game_data = value.__dict__.copy()
+            game_data['date'] = game_data['date'].isoformat()  # Convert date to string
+            return json.dumps(game_data)
         return None
 
     def process_result_value(self, value, dialect):
         if value is not None:
             game_data = json.loads(value)
+            game_data['date'] = datetime.fromisoformat(game_data['date']).date()  # Convert string to date
             return Game.fromdict(game_data)
         return None
 
@@ -88,18 +92,18 @@ class GameTable(Base):
         return f"Game(id={self.id}, date={self.date}, name='{self.name}')"
 
 
-# server = 'MYSQL5048.site4now.net'
-# database = 'db_a53d6c_donktrk'
-# uid = 'a53d6c_donktrk'
-# password = 'donkhouse72'
-# driver = '{MySQL ODBC 8.0 UNICODE Driver}'
-# Create the connection URL for SQLAlchemy
-# connection_string = f"mysql://{uid}:{password}@{server}/{database}"
-# engine = create_engine(connection_string, echo=True)
+server = 'MYSQL5048.site4now.net'
+database = 'db_a53d6c_donktrk'
+uid = 'a53d6c_donktrk'
+password = 'donkhouse72'
+driver = '{MySQL ODBC 8.0 UNICODE Driver}'
+#Create the connection URL for SQLAlchemy
+connection_string = f"mysql://{uid}:{password}@{server}/{database}"
+engine = create_engine(connection_string, echo=True)
 
-# Drop existing tables
+#Drop existing tables
 # Base.metadata.drop_all(bind=engine)
 
 # Create new empty tables
-#Base.metadata.create_all(bind=engine)
-#engine.dispose()
+Base.metadata.create_all(bind=engine)
+engine.dispose()
