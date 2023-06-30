@@ -14,7 +14,7 @@ const pool = mysql.createPool({
 });
 
 app.use(cors());
-app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.urlencoded({ extended: true }))
 // Define a route to handle the query
 app.get('/api/get', (req, res) => {
     // Perform the query using pool.query
@@ -24,7 +24,7 @@ app.get('/api/get', (req, res) => {
         res.status(500).json({ error: 'An error occurred' });
         return;
       }
-  
+      
       // Send the query results as the response
       res.json(results);
     });
@@ -51,6 +51,25 @@ app.get('/api/get/:username', (req, res) => {
       // Send the query results as the response
       res.json(results);
     });
+});
+
+app.get('/api/get/game/:id', (req, res) => {
+  const game_id = parseInt(req.params.id)
+  const query = `
+  SELECT games.playerNets
+  FROM games
+  WHERE games.id = ?
+  `;
+
+  pool.query(query, [game_id], (error, results, fields) => {
+    if (error) {
+      console.error('Error executing query:', error);
+      res.status(500).json({ error: 'An error occurred' });
+      return
+    }
+    console.log(results)
+    res.json(results)
+  });
 });
 
 app.listen(3001, () => {

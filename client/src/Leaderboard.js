@@ -3,6 +3,8 @@ import { Link, useLoaderData } from "react-router-dom";
 
 export default function Leaderboard() {
     const players = useLoaderData()
+    console.log(players)
+
     const [leaderboardOption, setLeaderboardOption] = useState("biggest winners");
 
     const handleLeaderboardToggle = (option) => {
@@ -11,14 +13,19 @@ export default function Leaderboard() {
 
     const filteredPlayerList = () => {
         if (leaderboardOption === "biggest winners") {
-        return players.filter((player) => player.net > 0).sort((a, b) => b.net - a.net);
-        } else if (leaderboardOption === "biggest losers") {
-        return players.filter((player) => player.net < 0).sort((a, b) => a.net - b.net);
+            return players.
+                filter((player) => JSON.parse(player.stats).net > 0)
+                .sort((a, b) => JSON.parse(b.stats).net - JSON.parse(a.stats).net);
+        }
+        else if (leaderboardOption === "biggest losers") {
+            return players.
+                filter((player) => JSON.parse(player.stats).net < 0)
+                .sort((a, b) => JSON.parse(a.stats).net - JSON.parse(b.stats).net);
         } else {
-        return players;
+            return players;
         }
     };
-    
+
     return (
         <div className="leaderboard">
             <div className="leaderboard-toggler">
@@ -37,10 +44,10 @@ export default function Leaderboard() {
             </div>
             {filteredPlayerList().map(player => (
                 <Link to={player.username.toString()} key={player.id}>
-                    <p>{player.username} | {player.net}</p>
+                    <p>{player.username} | {JSON.parse(player.stats).net}</p>
                 </Link>
             ))}
-      </div>
+        </div>
     );
 }
 
