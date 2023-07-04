@@ -239,6 +239,7 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
 
 
 def main():
+    init_info()
     prev_info = load_info()
     curr_info = prev_info.copy()
     parse_nets(sys.argv[2], curr_info)
@@ -251,8 +252,9 @@ def main():
 
         if existing_row:
             db_player = existing_row.stats
+            db_player.update(player)
             stmt = update(PlayerTable).where(PlayerTable.username == player.username).values(
-                stats = db_player.update(player)
+                stats = db_player
             )
             session.execute(stmt)
             session.commit()
