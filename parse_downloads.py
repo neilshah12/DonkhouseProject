@@ -252,7 +252,10 @@ def main():
 
         if existing_row:
             db_player = existing_row.stats
-            db_player.update(player)
+            stmt = update(PlayerTable).where(PlayerTable.username == player.username).values(
+                stats = db_player.update(player)
+            )
+            session.execute(stmt)
             session.commit()
         else:
             new_row = PlayerTable(player)
