@@ -15,11 +15,11 @@ import json
 all_players: Dict[str, Player] = {}
 all_games: List[Game] = []
 
-server = 'MYSQL5048.site4now.net'
-database = 'db_a53d6c_donktrk'
-uid = 'a53d6c_donktrk'
-password = 'donkhouse72'
-driver = 'mysql+mysqlconnector'
+server = "MYSQL5048.site4now.net"
+database = "db_a53d6c_donktrk"
+uid = "a53d6c_donktrk"
+password = "donkhouse72"
+driver = "mysql+mysqlconnector"
 connection_string = f"{driver}://{uid}:{password}@{server}/{database}"
 engine = create_engine(connection_string, echo=True)
 Session = sessionmaker(bind=engine)
@@ -53,7 +53,9 @@ def update_players(players_dict, game_players):
 def parse_nets(ledger, info):  # ledger
     # print(ledger)
     table = re.search(r"(.*?)_ledger.csv", ledger).group(1)
-    df = pd.read_csv(ledger, skiprows=1, skip_blank_lines=False)
+    df = pd.read_csv(
+        ledger, skiprows=1, skip_blank_lines=False, names=["User", "Net", "In"]
+    )
 
     if f"{table} latest parsed time" in info:
         latest_parsed_time = info[f"{table} latest parsed time"]
@@ -252,8 +254,10 @@ def main():
         if existing_row:
             db_player = existing_row.stats
             db_player.update(player)
-            stmt = update(PlayerTable).where(PlayerTable.username == player.username).values(
-                stats = db_player
+            stmt = (
+                update(PlayerTable)
+                .where(PlayerTable.username == player.username)
+                .values(stats=db_player)
             )
             session.execute(stmt)
             session.commit()
