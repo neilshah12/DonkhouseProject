@@ -6,7 +6,6 @@ export default function GameInfo() {
 
     const playerNets = JSON.parse(players.playerNets).player_nets;
     const sortedEntries = Object.entries(playerNets).sort((a, b) => b[1] - a[1]);
-    console.log(sortedEntries)
     return (
         <div className="playerinfo">
           <table className="leaderboard-table">
@@ -20,7 +19,7 @@ export default function GameInfo() {
               {sortedEntries.map(([username, net]) => (
                 <tr key={username}>
                   <td>
-                    <Link to={`/${username}`}>{username}</Link>
+                    <Link to={`/${username}`} className="table-link">{username}</Link>
                   </td>
                   <td>{net}</td>
                 </tr>

@@ -49,7 +49,6 @@ app.get('/api/get/:username', (req, res) => {
       }
     
       // Send the query results as the response
-      console.log(results)
       res.json(results);
     });
 });
@@ -68,7 +67,6 @@ app.get('/api/get/game/:id', (req, res) => {
       res.status(500).json({ error: 'An error occurred' });
       return
     }
-    console.log(results)
     res.json(results)
   });
 });

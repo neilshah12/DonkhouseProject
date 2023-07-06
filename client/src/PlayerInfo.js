@@ -7,26 +7,26 @@ export default function PlayerInfo() {
     const statistics_entries = Object.entries(statistics).filter(([key]) => !["username", "net", "raised"].includes(key));
     return (
         <div className="playerinfo">
-          <table className="leaderboard-table">
-            <thead>
-              <tr>
-                <th>{username}</th>
-                <th>{(JSON.parse(player_info[0].stats).net >= 0 ? "+$" : "-$") + Math.abs(JSON.parse(player_info[0].stats).net)}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {player_info.map(game => (
-                <tr key={game.id}>
-                  <td>
-                    <Link to={`/game/${game.id}`}>{game.name.replace("logs/", "")}</Link>
-                  </td>
-                  <td>{new Date(game.date).toLocaleDateString()}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="leaderboard-table">
+            <div className="flex">
+              <h3>{username}</h3>
+              <div className="item">{(JSON.parse(player_info[0].stats).net >= 0 ? "+$" : "-$") + Math.abs(JSON.parse(player_info[0].stats).net)}</div>
+            </div>
+            {player_info.map(game => (
+              <Link to={`/game/${game.id}`} key={game.id} className="leaderboard-entry">
+                <div className="flex">
+                <div className="item">
+                  {game.name.replace("logs/", "")}
+                </div>
+                <div className="item">
+                  {new Date(game.date).toLocaleDateString()}
+                </div>
+                </div>
+              </Link>
+            ))}
+          </div>
 
-          <table>
+          <table className="leaderboard-table">
             <tbody>
                 {statistics_entries.map(([name, data]) => (
                 <tr key={name}>

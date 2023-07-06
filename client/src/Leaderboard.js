@@ -35,8 +35,8 @@ export default function Leaderboard() {
     };
 
     return (
-        <div className="leaderboard-container">
-          <div className="leaderboard-toggler">
+        <div className="board">
+          <div className="duration">
                 <button
                     className={leaderboardOption === "biggest winners" ? "active" : ""}
                     onClick={() => handleLeaderboardToggle("biggest winners")}
@@ -56,28 +56,28 @@ export default function Leaderboard() {
                     Donk Betting Board of Shame
                 </button>
             </div>
-          <table className="leaderboard-table">
-            <thead>
-              <tr>
-                <th>Player Name</th>
-                <th>Player Data</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPlayerList().map(player => (
-                <tr key={player.id}>
-                  <td>
-                    <Link to={player.username.toString()}>{player.username}</Link>
-                  </td>
-                  <td>
-                    {leaderboardOption === "donk betting board of shame"
-                      ? `${JSON.parse(player.stats).donk[0]} / ${JSON.parse(player.stats).donk[1]}`
-                      : JSON.parse(player.stats).net}
-                  </td>
-                </tr>
+            <div className="leaderboard-table">
+              {filteredPlayerList().map((player, index) => (
+                <Link
+                  key={player.username.toString()}
+                  to={player.username.toString()}
+                  className="leaderboard-entry"
+                >
+                  <div className="flex">
+                    <div className="item">
+                      {player.username}
+                    </div>
+                    <div className="item">
+                      <span>
+                        {leaderboardOption === "donk betting board of shame"
+                          ? `${JSON.parse(player.stats).donk[0]} / ${JSON.parse(player.stats).donk[1]}`
+                          : JSON.parse(player.stats).net}
+                      </span>
+                    </div>
+                  </div>
+                </Link>
               ))}
-            </tbody>
-          </table>
+            </div>
         </div>
       );
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {createBrowserRouter, Route, createRoutesFromElements, RouterProvider} from 'react-router-dom';
 import Leaderboard, { playerLoader } from "./Leaderboard";
 import './App.css';
+import './style.css';
 import RootLayout from "./RootLayout";
 import PlayerInfo, { playerInfoLoader } from "./PlayerInfo";
 import GameInfo, { gameInfoLoader } from "./GameInfo";

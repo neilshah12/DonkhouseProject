@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+* > * {
+    font-family: "Poppins", cursive;
+    margin: 0;
+    background-color: #62b0da; /* Use a poker-themed color */
+
+}
+
+:root{
+    --color-dark: #2C3131;
+    --color-light: #F3F3F2;
+}
+
+.App{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+}
+
+.rootlayout .title{
+    text-align: center;
+}
+
+.board {
+    text-align: center;
+}
+
+.board .duration{
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+    margin-top: 1em;
+}
+
+.board .duration > button{
+    border: 1px solid var(--color-light);
+    padding: .5em 2em;
+    border-radius: 50px;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.board .duration > button:hover{
+    background-color: var(--color-dark);
+    color: var(--color-light);
+}
+
+.leaderboard-table {
+    margin-top: 2em;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaderboard-table th,
+.leaderboard-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.leaderboard-table th {
+  background-color: #f2f2f2;
+}
+
+.leaderboard-table .table-link {
+  color: #000;
+  text-decoration: none;
+}
+
+.leaderboard-table .table-link:hover {
+  font-weight: bold;
+}
+
+.leaderboard-table .flex{
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+    text-align: left;
+    margin-bottom: 2em;
+}
+
+.leaderboard-table .flex .item{
+    display: flex;
+    align-items: center;
+}
+
+.leaderboard-entry {
+    color: black; /* Set the initial color of the link */
+    text-decoration: none; /* Remove default link underline */
+  }
+  
+  .leaderboard-entry:hover {
+    color: lightgray; /* Set the color when hovering over the link */
+  }
