@@ -15,15 +15,15 @@ import json
 all_players: Dict[str, Player] = {}
 all_games: List[Game] = []
 
-# server = "MYSQL5048.site4now.net"
-# database = "db_a53d6c_donktrk"
-# uid = "a53d6c_donktrk"
-# password = "donkhouse72"
-# driver = "mysql+mysqlconnector"
-# connection_string = f"{driver}://{uid}:{password}@{server}/{database}"
-# engine = create_engine(connection_string, echo=True)
-# Session = sessionmaker(bind=engine)
-# session = Session()
+server = "MYSQL5048.site4now.net"
+database = "db_a53d6c_donktrk"
+uid = "a53d6c_donktrk"
+password = "donkhouse72"
+driver = "mysql+mysqlconnector"
+connection_string = f"{driver}://{uid}:{password}@{server}/{database}"
+engine = create_engine(connection_string, echo=True)
+Session = sessionmaker(bind=engine)
+session = Session()
 
 
 def init_info():
@@ -248,49 +248,49 @@ def main():
     parse_nets(sys.argv[2], curr_info)
     for _, player in all_players.items():
         print(player)
-    # parse_stats(sys.argv[1], prev_info, curr_info)
+    parse_stats(sys.argv[1], prev_info, curr_info)
 
-    # for _, player in all_players.items():
-    #     existing_row = (
-    #         session.query(PlayerTable).filter_by(username=player.username).first()
-    #     )
+    for _, player in all_players.items():
+        existing_row = (
+            session.query(PlayerTable).filter_by(username=player.username).first()
+        )
 
-    #     if existing_row:
-    #         db_player = existing_row.stats
-    #         db_player.update(player)
-    #         stmt = (
-    #             update(PlayerTable)
-    #             .where(PlayerTable.username == player.username)
-    #             .values(stats=db_player)
-    #         )
-    #         session.execute(stmt)
-    #         session.commit()
-    #     else:
-    #         new_row = PlayerTable(player)
-    #         session.add(new_row)
-    #         session.commit()
+        if existing_row:
+            db_player = existing_row.stats
+            db_player.update(player)
+            stmt = (
+                update(PlayerTable)
+                .where(PlayerTable.username == player.username)
+                .values(stats=db_player)
+            )
+            session.execute(stmt)
+            session.commit()
+        else:
+            new_row = PlayerTable(player)
+            session.add(new_row)
+            session.commit()
 
-    # for game in all_games:
-    #     game_entry = GameTable(game)
-    #     for player in game.player_nets:
-    #         player_entry = (
-    #             session.query(PlayerTable)
-    #             .filter(PlayerTable.username == player)
-    #             .first()
-    #         )
+    for game in all_games:
+        game_entry = GameTable(game)
+        for player in game.player_nets:
+            player_entry = (
+                session.query(PlayerTable)
+                .filter(PlayerTable.username == player)
+                .first()
+            )
 
-    #         if player_entry:
-    #             player_entry.games.append(game_entry)
-    #             session.commit()
+            if player_entry:
+                player_entry.games.append(game_entry)
+                session.commit()
 
-    # update_pickle_info(curr_info)
-    # session.close()
-    # engine.dispose()
+    update_pickle_info(curr_info)
+    session.close()
+    engine.dispose()
 
 
 if __name__ == "__main__":
-    # try:
-    #     main()
-    # except Exception as exc:
-    #     print(exc)
+    try:
+        main()
+    except Exception as exc:
+        print(exc)
     main()
