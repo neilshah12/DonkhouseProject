@@ -2,9 +2,9 @@ from datetime import datetime as dt
 from typing import Dict, List
 from player import Player
 from game import Game
-# from schema import PlayerTable, GameTable
-# from sqlalchemy import create_engine, update
-# from sqlalchemy.orm import sessionmaker
+from schema import PlayerTable, GameTable
+from sqlalchemy import create_engine, update
+from sqlalchemy.orm import sessionmaker
 import math
 import pandas as pd
 import pickle
