@@ -1,9 +1,9 @@
-from __future__ import annotations
 
 class Player:
     def __init__(self, username, net=0):
         self.username = username
         self.net = net
+        self.nets = {}
         self.vpip = (0, 0)
         self.uopfr = (0, 0)
         self.pfr = (0, 0)
@@ -37,6 +37,7 @@ class Player:
         return (
             f"Player: {self.username}, "
             f"Net: {self.net}, "
+            f"Nets: {self.nets}, "
             f"VPIP: {self.vpip}, "
             f"UOPFR: {self.uopfr}, "
             f"PFR: {self.pfr}, "
@@ -62,3 +63,6 @@ class Player:
         self.cbet = tuple(map(lambda i, j: i + j, self.cbet, other.cbet))
         self.donk = tuple(map(lambda i, j: i + j, self.donk, other.donk))
         self.lim = tuple(map(lambda i, j: i + j, self.lim, other.lim))
+
+        for k, v in other.nets.items():
+            self.nets[k] = v

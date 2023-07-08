@@ -2,9 +2,9 @@ from datetime import datetime as dt
 from typing import Dict, List
 from player import Player
 from game import Game
-from schema import PlayerTable, GameTable
-from sqlalchemy import create_engine, update
-from sqlalchemy.orm import sessionmaker
+# from schema import PlayerTable, GameTable
+# from sqlalchemy import create_engine, update
+# from sqlalchemy.orm import sessionmaker
 import math
 import pandas as pd
 import pickle
@@ -15,15 +15,15 @@ import json
 all_players: Dict[str, Player] = {}
 all_games: List[Game] = []
 
-server = "MYSQL5048.site4now.net"
-database = "db_a53d6c_donktrk"
-uid = "a53d6c_donktrk"
-password = "donkhouse72"
-driver = "mysql+mysqlconnector"
-connection_string = f"{driver}://{uid}:{password}@{server}/{database}"
-engine = create_engine(connection_string, echo=True)
-Session = sessionmaker(bind=engine)
-session = Session()
+# server = "MYSQL5048.site4now.net"
+# database = "db_a53d6c_donktrk"
+# uid = "a53d6c_donktrk"
+# password = "donkhouse72"
+# driver = "mysql+mysqlconnector"
+# connection_string = f"{driver}://{uid}:{password}@{server}/{database}"
+# engine = create_engine(connection_string, echo=True)
+# Session = sessionmaker(bind=engine)
+# session = Session()
 
 
 def init_info():
@@ -54,9 +54,9 @@ def parse_nets(ledger, info):  # ledger
     # print(ledger)
     table = re.search(r"(.*?)_ledger.csv", ledger).group(1)
     df = pd.read_csv(
-        ledger, skiprows=1, skip_blank_lines=False, names=["User", "Net", "In"]
+        ledger, skiprows=1, skip_blank_lines=False, usecols = ['User','In', 'Net']
     )
-
+    # print(df)
     if f"{table} latest parsed time" in info:
         latest_parsed_time = info[f"{table} latest parsed time"]
     else:
@@ -79,8 +79,10 @@ def parse_nets(ledger, info):  # ledger
             new_latest_time = max(new_latest_time, game_end_time)
             for username, net in curr_game.player_nets.items():
                 all_players[username] = Player(username, net)
+                all_players[username].nets[game_end_time.strftime('%d %b %Y, %I:%M%p')] = net
         elif not math.isnan(net):
-            curr_game.add_player(Player(user, net=net))
+            player = Player(user, net=net)
+            curr_game.add_player(player)
     if new_latest_time > latest_parsed_time:
         info[f"{table} latest parsed time"] = new_latest_time
 
@@ -244,44 +246,46 @@ def main():
     prev_info = load_info()
     curr_info = prev_info.copy()
     parse_nets(sys.argv[2], curr_info)
-    parse_stats(sys.argv[1], prev_info, curr_info)
-
     for _, player in all_players.items():
-        existing_row = (
-            session.query(PlayerTable).filter_by(username=player.username).first()
-        )
+        print(player)
+    # parse_stats(sys.argv[1], prev_info, curr_info)
 
-        if existing_row:
-            db_player = existing_row.stats
-            db_player.update(player)
-            stmt = (
-                update(PlayerTable)
-                .where(PlayerTable.username == player.username)
-                .values(stats=db_player)
-            )
-            session.execute(stmt)
-            session.commit()
-        else:
-            new_row = PlayerTable(player)
-            session.add(new_row)
-            session.commit()
+    # for _, player in all_players.items():
+    #     existing_row = (
+    #         session.query(PlayerTable).filter_by(username=player.username).first()
+    #     )
 
-    for game in all_games:
-        game_entry = GameTable(game)
-        for player in game.player_nets:
-            player_entry = (
-                session.query(PlayerTable)
-                .filter(PlayerTable.username == player)
-                .first()
-            )
+    #     if existing_row:
+    #         db_player = existing_row.stats
+    #         db_player.update(player)
+    #         stmt = (
+    #             update(PlayerTable)
+    #             .where(PlayerTable.username == player.username)
+    #             .values(stats=db_player)
+    #         )
+    #         session.execute(stmt)
+    #         session.commit()
+    #     else:
+    #         new_row = PlayerTable(player)
+    #         session.add(new_row)
+    #         session.commit()
 
-            if player_entry:
-                player_entry.games.append(game_entry)
-                session.commit()
+    # for game in all_games:
+    #     game_entry = GameTable(game)
+    #     for player in game.player_nets:
+    #         player_entry = (
+    #             session.query(PlayerTable)
+    #             .filter(PlayerTable.username == player)
+    #             .first()
+    #         )
 
-    update_pickle_info(curr_info)
-    session.close()
-    engine.dispose()
+    #         if player_entry:
+    #             player_entry.games.append(game_entry)
+    #             session.commit()
+
+    # update_pickle_info(curr_info)
+    # session.close()
+    # engine.dispose()
 
 
 if __name__ == "__main__":
