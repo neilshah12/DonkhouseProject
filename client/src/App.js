@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from "react";
 import {createBrowserRouter, Route, createRoutesFromElements, RouterProvider} from 'react-router-dom';
 import Leaderboard, { playerLoader } from "./Leaderboard";
 import './App.css';

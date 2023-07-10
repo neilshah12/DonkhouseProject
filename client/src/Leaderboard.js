@@ -1,14 +1,29 @@
 import React, { useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import Select from 'react-select';
 
 export default function Leaderboard() {
     const players = useLoaderData()
-
+    const [selectedOption, setSelectedOption] = useState("hello");
     const [leaderboardOption, setLeaderboardOption] = useState("biggest winners");
+    const navigate = useNavigate();
 
     const handleLeaderboardToggle = (option) => {
         setLeaderboardOption(option);
     };
+
+    const extractPlayers = () => {
+      const result = [];
+
+      for (let i = 0; i < players.length; i++) {
+        const obj = players[i];
+        const username = obj.username;
+        const newObj = { value: username, label: username };
+        result.push(newObj);
+      }
+      return result;
+    }
+    const options = extractPlayers(players);
 
     const filteredPlayerList = () => {
         if (leaderboardOption === "biggest winners") {
@@ -34,8 +49,21 @@ export default function Leaderboard() {
         }
     };
 
+    const handleOptionChange = e => {
+      setSelectedOption(e.value);
+      const link = e.value.toString();
+      navigate(link)
+    };
+
     return (
         <div className="board">
+          <Select 
+            options={options} 
+            onChange={handleOptionChange}
+            value={options.filter(function(option) {
+              return option.value === selectedOption;
+            })} 
+          />
           <div className="duration">
                 <button
                     className={leaderboardOption === "biggest winners" ? "active" : ""}
