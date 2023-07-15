@@ -15,11 +15,11 @@ import json
 all_players: Dict[str, Player] = {}
 all_games: List[Game] = []
 
-server = "MYSQL5048.site4now.net"
-database = "db_a53d6c_donktrk"
-uid = "a53d6c_donktrk"
-password = "donkhouse72"
-driver = "mysql+mysqlconnector"
+server = 'MYSQL5048.site4now.net'
+database = 'db_a53d6c_donktrk'
+uid = 'a53d6c_donktrk'
+password = 'donkhouse72'
+driver = 'mysql+mysqlconnector'
 connection_string = f"{driver}://{uid}:{password}@{server}/{database}"
 engine = create_engine(connection_string, echo=True)
 Session = sessionmaker(bind=engine)
@@ -53,10 +53,8 @@ def update_players(players_dict, game_players):
 def parse_nets(ledger, info):  # ledger
     # print(ledger)
     table = re.search(r"(.*?)_ledger.csv", ledger).group(1)
-    df = pd.read_csv(
-        ledger, skiprows=1, skip_blank_lines=False, usecols = ['User','In', 'Net']
-    )
-    # print(df)
+    df = pd.read_csv(ledger, skiprows=1, skip_blank_lines=False)
+
     if f"{table} latest parsed time" in info:
         latest_parsed_time = info[f"{table} latest parsed time"]
     else:
@@ -79,10 +77,8 @@ def parse_nets(ledger, info):  # ledger
             new_latest_time = max(new_latest_time, game_end_time)
             for username, net in curr_game.player_nets.items():
                 all_players[username] = Player(username, net)
-                all_players[username].nets[game_end_time.strftime('%d %b %Y, %I:%M%p')] = net
         elif not math.isnan(net):
-            player = Player(user, net=net)
-            curr_game.add_player(player)
+            curr_game.add_player(Player(user, net=net))
     if new_latest_time > latest_parsed_time:
         info[f"{table} latest parsed time"] = new_latest_time
 
@@ -243,11 +239,10 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
 
 
 def main():
+    init_info()
     prev_info = load_info()
     curr_info = prev_info.copy()
     parse_nets(sys.argv[2], curr_info)
-    for _, player in all_players.items():
-        print(player)
     parse_stats(sys.argv[1], prev_info, curr_info)
 
     for _, player in all_players.items():
@@ -258,10 +253,8 @@ def main():
         if existing_row:
             db_player = existing_row.stats
             db_player.update(player)
-            stmt = (
-                update(PlayerTable)
-                .where(PlayerTable.username == player.username)
-                .values(stats=db_player)
+            stmt = update(PlayerTable).where(PlayerTable.username == player.username).values(
+                stats = db_player
             )
             session.execute(stmt)
             session.commit()
