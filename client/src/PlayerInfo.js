@@ -1,13 +1,23 @@
 import { Link, useLoaderData, useParams } from 'react-router-dom';
 import React, { useState } from 'react';
+import LineGraph from './LineGraph.js';
 
 export default function PlayerInfo() {
   const { username } = useParams();
   const player_info = useLoaderData();
+  const nets_history = JSON.parse(player_info[0].stats).nets
+  const net_dates = Object.keys(nets_history);
+  console.log(net_dates);
+  const net_nums = Object.values(nets_history);
+  for (let i = 1; i < Object.keys(nets_history).length; i++) {
+    net_nums[i] += net_nums[i - 1]
+  }
+  console.log(net_nums);
+  
   const [leaderboardOption, setLeaderboardOption] = useState('games');
   const statistics = JSON.parse(player_info[0].stats);
   const statistics_entries = Object.entries(statistics).filter(
-    ([key]) => !['username', 'net', 'raised'].includes(key)
+    ([key]) => !['username', 'net', 'raised', 'nets'].includes(key)
   );
   const [currentPage, setCurrentPage] = useState(1);
   const [gamesPerPage] = useState(10);
@@ -27,6 +37,11 @@ export default function PlayerInfo() {
     setCurrentPage(pageNumber);
   };
 
+  const game_data = net_nums;
+  const labels = []
+  for (let i = 1; i <= net_nums.length; i++) {
+    labels.push("Game " + i)
+  }
   return (
     <div className="playerinfo">
       <div className="leaderboard-table">
@@ -38,6 +53,8 @@ export default function PlayerInfo() {
           </div>
         </div>
       </div>
+
+      <LineGraph  data={game_data} labels={labels}/>
 
       <div className="board">
         <div className="duration">

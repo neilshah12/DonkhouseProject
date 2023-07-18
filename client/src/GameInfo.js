@@ -1,7 +1,6 @@
-import { Link, useLoaderData, useParams } from "react-router-dom"
+import { Link, useLoaderData } from "react-router-dom"
 
 export default function GameInfo() {
-    const { id } = useParams()
     const [players] = useLoaderData()
 
     const playerNets = JSON.parse(players.playerNets).player_nets;

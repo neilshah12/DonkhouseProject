@@ -3,7 +3,7 @@
 * > * {
     font-family: "Poppins", cursive;
     margin: 0;
-    background-color: #62b0da; /* Use a poker-themed color */
+    background-color: #84b9d5; /* Use a poker-themed color */
 
 }
 
@@ -158,4 +158,8 @@
 
 .home-link:hover {
   color: #555;
+}
+
+.css-qbdosj-Input {
+  border-color: #333;
 }

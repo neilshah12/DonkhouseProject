@@ -37,7 +37,14 @@ export default function Leaderboard() {
                 .filter((player) => JSON.parse(player.stats).net < 0)
                 .sort((a, b) => JSON.parse(a.stats).net - JSON.parse(b.stats).net)
                 .slice(0, 10);
-        } 
+        }
+        else if (leaderboardOption === "most aggressive") {
+          return players
+              .filter((player) => JSON.parse(player.stats).vpip[1] > 0)
+              .sort((a, b) => JSON.parse(b.stats).vpip[0]/JSON.parse(b.stats).vpip[1]
+                 - JSON.parse(a.stats).vpip[0]/JSON.parse(a.stats).vpip[1])
+              .slice(0, 10);
+        }  
         else if (leaderboardOption === "donk betting board of shame") {
             return players
                 .filter((player) => JSON.parse(player.stats).donk[1] > 0)
@@ -83,6 +90,12 @@ export default function Leaderboard() {
                 >
                     Donk Betting Board of Shame
                 </button>
+                <button
+                    className={leaderboardOption === "most aggressive" ? "active" : ""}
+                    onClick={() => handleLeaderboardToggle("most aggressive")}
+                >
+                    Most Aggressive
+                </button>
             </div>
             <div className="leaderboard-table">
               {filteredPlayerList().map((player, index) => (
@@ -97,9 +110,10 @@ export default function Leaderboard() {
                     </div>
                     <div className="item">
                       <span>
-                        {leaderboardOption === "donk betting board of shame"
-                          ? `${JSON.parse(player.stats).donk[0]} / ${JSON.parse(player.stats).donk[1]}`
-                          : JSON.parse(player.stats).net}
+                        {leaderboardOption === "most aggressive" && `${JSON.parse(player.stats).vpip[0]} / ${JSON.parse(player.stats).vpip[1]}`}
+                        {leaderboardOption === "donk betting board of shame" && `${JSON.parse(player.stats).donk[0]} / ${JSON.parse(player.stats).donk[1]}`}
+                        {leaderboardOption === "biggest winners" && `${JSON.parse(player.stats).net}`}
+                        {leaderboardOption === "biggest losers" && `${JSON.parse(player.stats).net}`}
                       </span>
                     </div>
                   </div>
