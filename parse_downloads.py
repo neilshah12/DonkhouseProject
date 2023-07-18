@@ -74,7 +74,7 @@ def parse_nets(ledger, info):  # ledger
             game_end_time = dt.strptime(row["In"], "%Y-%m-%d %H:%M:%S")
             if game_end_time <= latest_parsed_time:
                 break
-            curr_game.end_time = game_end_time.date()
+            curr_game.date = game_end_time.date()
             all_games.append(curr_game)
             new_latest_time = max(new_latest_time, game_end_time)
             for username, net in curr_game.player_nets.items():
