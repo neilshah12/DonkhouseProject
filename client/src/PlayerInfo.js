@@ -125,8 +125,11 @@ export default function PlayerInfo() {
 
 export const playerInfoLoader = async ({ params }) => {
     const { username } = params
-    const res = await fetch('http://localhost:3001/api/get/' + username)
+    const res = await fetch('http://devalshah-001-site7.ctempurl.com/api/get/' + username)
 
+    if (!res.ok) {
+      throw Error('Database is down, please come back another time and let Neil know')
+    }
     
     return res.json()
 }

@@ -4,6 +4,8 @@ import Select from 'react-select';
 
 export default function Leaderboard() {
     const players = useLoaderData()
+    const testtest = JSON.parse(players[0].stats).nets;
+    console.log(Object.keys(testtest).length);
     const [selectedOption, setSelectedOption] = useState("hello");
     const [leaderboardOption, setLeaderboardOption] = useState("biggest winners");
     const navigate = useNavigate();
@@ -32,10 +34,10 @@ export default function Leaderboard() {
                 .sort((a, b) => JSON.parse(b.stats).net - JSON.parse(a.stats).net)
                 .slice(0, 10);
         }
-        else if (leaderboardOption === "biggest losers") {
+        else if (leaderboardOption === "most games played") {
             return players
-                .filter((player) => JSON.parse(player.stats).net < 0)
-                .sort((a, b) => JSON.parse(a.stats).net - JSON.parse(b.stats).net)
+                .filter((player) => Object.keys(JSON.parse(player.stats).nets).length > 0)
+                .sort((a, b) => Object.keys(JSON.parse(b.stats).nets).length - Object.keys(JSON.parse(a.stats).nets).length)
                 .slice(0, 10);
         }
         else if (leaderboardOption === "most aggressive") {
@@ -43,7 +45,7 @@ export default function Leaderboard() {
               .filter((player) => JSON.parse(player.stats).vpip[1] > 0)
               .sort((a, b) => JSON.parse(b.stats).vpip[0]/JSON.parse(b.stats).vpip[1]
                  - JSON.parse(a.stats).vpip[0]/JSON.parse(a.stats).vpip[1])
-              .slice(0, 10);
+              .slice(0, 15);
         }  
         else if (leaderboardOption === "donk betting board of shame") {
             return players
@@ -79,10 +81,10 @@ export default function Leaderboard() {
                     Winningest
                 </button>
                 <button
-                    className={leaderboardOption === "biggest losers" ? "active" : ""}
-                    onClick={() => handleLeaderboardToggle("biggest losers")}
+                    className={leaderboardOption === "most games played" ? "active" : ""}
+                    onClick={() => handleLeaderboardToggle("most games played")}
                 >
-                    Losingest
+                    Most Games Played
                 </button>
                 <button
                     className={leaderboardOption === "donk betting board of shame" ? "active" : ""}
@@ -94,7 +96,7 @@ export default function Leaderboard() {
                     className={leaderboardOption === "most aggressive" ? "active" : ""}
                     onClick={() => handleLeaderboardToggle("most aggressive")}
                 >
-                    Most Aggressive
+                    Highest VPIPs
                 </button>
             </div>
             <div className="leaderboard-table">
@@ -113,19 +115,26 @@ export default function Leaderboard() {
                         {leaderboardOption === "most aggressive" && `${JSON.parse(player.stats).vpip[0]} / ${JSON.parse(player.stats).vpip[1]}`}
                         {leaderboardOption === "donk betting board of shame" && `${JSON.parse(player.stats).donk[0]} / ${JSON.parse(player.stats).donk[1]}`}
                         {leaderboardOption === "biggest winners" && `${JSON.parse(player.stats).net}`}
-                        {leaderboardOption === "biggest losers" && `${JSON.parse(player.stats).net}`}
+                        {leaderboardOption === "most games played" && `${Object.keys(JSON.parse(player.stats).nets).length}`}
                       </span>
                     </div>
                   </div>
                 </Link>
               ))}
             </div>
+            <div className="creators">
+                Made by Neil Shah and Brandon Du
+            </div>
         </div>
       );
 }
 
 export const playerLoader = async () => {
-    const res = await fetch('http://localhost:3001/api/get')
+    const res = await fetch('http://devalshah-001-site7.ctempurl.com/api/get')
+
+    if (!res.ok) {
+      throw Error('Database is down, please come back another time and let Neil know')
+    }
 
     return res.json()
 }

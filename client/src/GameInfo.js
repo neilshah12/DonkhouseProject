@@ -31,9 +31,11 @@ export default function GameInfo() {
 
 export const gameInfoLoader = async ({ params }) => {
     const { id } = params
-    const res = await fetch('http://localhost:3001/api/get/game/' + id)
+    const res = await fetch('http://devalshah-001-site7.ctempurl.com/api/get/game/' + id)
 
-    const a = res.json()
-    console.log(a)
-    return a
+    if (!res.ok) {
+      throw Error('Database is down, please come back another time and let Neil know')
+    }
+    
+    return res.json()
 }
