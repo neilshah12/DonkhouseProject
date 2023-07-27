@@ -73,7 +73,7 @@ jobs:
         git add info.pickle
         git commit -m "update data" -a     
     - name: Push changes
-      uses: ad-m/github-push-action@main
+      uses: ad-m/github-push-action@master
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         branch: main
