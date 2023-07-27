@@ -36,12 +36,12 @@ jobs:
     - name: Run script
       run: python download_files.py
     - name: Upload artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: transaction-logs
         path: logs/
     - name: Download artifact
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: transaction-logs
     - name: Print files before cleanup
