@@ -244,6 +244,7 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
 
 
 def main():
+    init_info()
     prev_info = load_info()
     curr_info = prev_info.copy()
     parse_nets(sys.argv[2], curr_info)
