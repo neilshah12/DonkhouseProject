@@ -49,7 +49,7 @@ jobs:
           echo "$file"
         done
     - name: Error check and cleanup log folder
-      run: find ./logs \( -type f \! -name "*_ledger.csv" -a \! -name "*_hand_histories.txt" -o -size 0 \) -delete
+      run: find ./logs \( -type f \! -name "*_ledger.csv" -a \! -name "*_hand_histories.txt" \) -delete
     - name: Print files after cleanup
       run: |
         files=(logs/*)
