@@ -286,6 +286,7 @@ def main():
                 session.commit()
 
     update_pickle_info(curr_info)
+    print(curr_info)
     session.close()
     engine.dispose()
 
