@@ -244,7 +244,7 @@ def parse_stats(hand_histories, prev_info, curr_info):  # hand histories
 
 
 def main():
-    init_info()
+    # init_info()
     prev_info = load_info()
     curr_info = prev_info.copy()
     parse_nets(sys.argv[2], curr_info)
@@ -252,38 +252,38 @@ def main():
         print(player)
     parse_stats(sys.argv[1], prev_info, curr_info)
 
-    for _, player in all_players.items():
-        existing_row = (
-            session.query(PlayerTable).filter_by(username=player.username).first()
-        )
+    # for _, player in all_players.items():
+    #     existing_row = (
+    #         session.query(PlayerTable).filter_by(username=player.username).first()
+    #     )
 
-        if existing_row:
-            db_player = existing_row.stats
-            db_player.update(player)
-            stmt = (
-                update(PlayerTable)
-                .where(PlayerTable.username == player.username)
-                .values(stats=db_player)
-            )
-            session.execute(stmt)
-            session.commit()
-        else:
-            new_row = PlayerTable(player)
-            session.add(new_row)
-            session.commit()
+    #     if existing_row:
+    #         db_player = existing_row.stats
+    #         db_player.update(player)
+    #         stmt = (
+    #             update(PlayerTable)
+    #             .where(PlayerTable.username == player.username)
+    #             .values(stats=db_player)
+    #         )
+    #         session.execute(stmt)
+    #         session.commit()
+    #     else:
+    #         new_row = PlayerTable(player)
+    #         session.add(new_row)
+    #         session.commit()
 
-    for game in all_games:
-        game_entry = GameTable(game)
-        for player in game.player_nets:
-            player_entry = (
-                session.query(PlayerTable)
-                .filter(PlayerTable.username == player)
-                .first()
-            )
+    # for game in all_games:
+    #     game_entry = GameTable(game)
+    #     for player in game.player_nets:
+    #         player_entry = (
+    #             session.query(PlayerTable)
+    #             .filter(PlayerTable.username == player)
+    #             .first()
+    #         )
 
-            if player_entry:
-                player_entry.games.append(game_entry)
-                session.commit()
+    #         if player_entry:
+    #             player_entry.games.append(game_entry)
+    #             session.commit()
 
     update_pickle_info(curr_info)
     print(curr_info)
