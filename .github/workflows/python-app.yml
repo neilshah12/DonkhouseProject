@@ -6,7 +6,7 @@ name: Donkhouse
 on:
   workflow_dispatch:
   schedule:
-    - cron: "15 23 * * *"
+    - cron: "0 */3 * * *"
 
 jobs:
   build:
