@@ -51,13 +51,10 @@ def update_players(players_dict, game_players):
 
 
 def parse_nets(ledger, info):  # ledger
-    print(ledger)
     table = re.search(r"(.*?)_ledger.csv", ledger).group(1)
-    print(table)
     df = pd.read_csv(
         ledger, skiprows=1, skip_blank_lines=False, usecols = ['User','In', 'Net']
     )
-    # print(df)
     if f"{table} latest parsed time" in info:
         latest_parsed_time = info[f"{table} latest parsed time"]
     else:
